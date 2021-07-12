@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UnknownPacket;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.lanternpowered.lmbda.LambdaFactory;
 import org.lanternpowered.lmbda.MethodHandlesExtensions;
 
