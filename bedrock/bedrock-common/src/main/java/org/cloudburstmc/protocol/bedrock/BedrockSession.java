@@ -4,7 +4,7 @@ import com.nukkitx.natives.sha256.Sha256;
 import com.nukkitx.natives.util.Natives;
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason;
 import org.cloudburstmc.protocol.bedrock.annotation.NoEncryption;
-import com.nukkitx.protocol.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.EventLoop;

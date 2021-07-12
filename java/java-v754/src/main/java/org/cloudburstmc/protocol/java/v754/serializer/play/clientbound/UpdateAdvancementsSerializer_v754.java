@@ -1,7 +1,6 @@
 package org.cloudburstmc.protocol.java.v754.serializer.play.clientbound;
 
 import com.nukkitx.math.vector.Vector2f;
-import com.nukkitx.protocol.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
@@ -10,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.java.JavaPacketHelper;
 import org.cloudburstmc.protocol.java.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.Advancement;

@@ -1,4 +1,4 @@
-package com.nukkitx.protocol.exception;
+package org.cloudburstmc.protocol.common.exception;
 
 public class PacketSerializeException extends RuntimeException {
 

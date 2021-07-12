@@ -3,7 +3,7 @@ package org.cloudburstmc.protocol.bedrock.wrapper;
 import com.nukkitx.network.VarInts;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.PacketSerializeException;
-import com.nukkitx.protocol.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

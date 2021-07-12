@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.bedrock.BedrockSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
+import org.cloudburstmc.protocol.common.handler.BatchHandler;
 
 import java.util.Collection;
 

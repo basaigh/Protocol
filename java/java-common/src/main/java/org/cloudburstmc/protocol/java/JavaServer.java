@@ -48,8 +48,9 @@ public class JavaServer extends Java {
         super(bindAddress, eventLoopGroup);
     }
 
+    //TODO: adapt this to new
     @Override
-    public CompletableFuture<Void> bind() {
+    public CompletableFuture<Void> bind(InetSocketAddress address) {
         Preconditions.checkNotNull(this.eventLoopGroup, "Event loop group was null");
         ChannelFuture future = new ServerBootstrap()
                 .channel(EventLoops.getChannelType().getServerSocketChannel())

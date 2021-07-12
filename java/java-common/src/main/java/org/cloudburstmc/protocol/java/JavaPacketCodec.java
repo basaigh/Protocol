@@ -1,7 +1,5 @@
 package org.cloudburstmc.protocol.java;
 
-import com.nukkitx.protocol.exception.PacketSerializeException;
-import com.nukkitx.protocol.util.Int2ObjectBiMap;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.ReferenceCountUtil;
 import io.netty.util.internal.logging.InternalLogger;
@@ -12,19 +10,18 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.util.Int2ObjectBiMap;
 import org.cloudburstmc.protocol.java.packet.State;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 
-import static com.nukkitx.network.util.Preconditions.checkArgument;
-import static com.nukkitx.network.util.Preconditions.checkNotNull;
-import static com.nukkitx.network.util.Preconditions.checkState;
+import static com.nukkitx.network.util.Preconditions.*;
 
 @Getter
 @Immutable

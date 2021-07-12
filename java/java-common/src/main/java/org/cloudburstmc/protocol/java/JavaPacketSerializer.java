@@ -1,7 +1,7 @@
 package org.cloudburstmc.protocol.java;
 
-import com.nukkitx.protocol.exception.PacketSerializeException;
-import com.nukkitx.protocol.serializer.PacketSerializer;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.serializer.PacketSerializer;
 import io.netty.buffer.ByteBuf;
 
 public interface JavaPacketSerializer<T extends JavaPacket<?>> extends PacketSerializer<T, JavaPacketHelper> {

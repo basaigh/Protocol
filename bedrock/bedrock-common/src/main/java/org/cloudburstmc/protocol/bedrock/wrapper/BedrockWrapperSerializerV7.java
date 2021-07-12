@@ -1,7 +1,7 @@
 package org.cloudburstmc.protocol.bedrock.wrapper;
 
 import com.nukkitx.network.VarInts;
-import com.nukkitx.protocol.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufUtil;

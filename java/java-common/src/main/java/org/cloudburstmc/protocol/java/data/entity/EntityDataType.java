@@ -4,7 +4,7 @@ import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.math.vector.Vector3i;
 import com.nukkitx.nbt.NbtMap;
 import com.nukkitx.network.VarInts;
-import com.nukkitx.protocol.util.TriConsumer;
+import org.cloudburstmc.protocol.common.util.TriConsumer;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import org.cloudburstmc.protocol.java.JavaPacketHelper;

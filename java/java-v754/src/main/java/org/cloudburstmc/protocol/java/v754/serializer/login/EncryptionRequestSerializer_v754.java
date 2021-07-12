@@ -1,7 +1,7 @@
 package org.cloudburstmc.protocol.java.v754.serializer.login;
 
 import com.nukkitx.network.VarInts;
-import com.nukkitx.protocol.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

@@ -1,15 +1,13 @@
 package org.cloudburstmc.protocol.java.v754.serializer.play.clientbound;
 
-import com.nukkitx.protocol.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.java.JavaPacketHelper;
 import org.cloudburstmc.protocol.java.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.SetPlayerTeamPacket;
-
-import java.util.List;
 
 import static org.cloudburstmc.protocol.java.packet.play.clientbound.SetPlayerTeamPacket.*;
 

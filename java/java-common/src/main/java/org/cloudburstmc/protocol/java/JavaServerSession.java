@@ -1,10 +1,10 @@
 package org.cloudburstmc.protocol.java;
 
-import com.nukkitx.protocol.MinecraftServerSession;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;
 import lombok.AllArgsConstructor;
+import org.cloudburstmc.protocol.common.MinecraftServerSession;
 import org.cloudburstmc.protocol.java.auth.SessionsHandler;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
 import org.cloudburstmc.protocol.java.exception.ProfileException;

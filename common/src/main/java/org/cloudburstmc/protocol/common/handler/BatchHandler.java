@@ -1,6 +1,6 @@
-package com.nukkitx.protocol.handler;
+package org.cloudburstmc.protocol.common.handler;
 
-import com.nukkitx.protocol.MinecraftSession;
+import org.cloudburstmc.protocol.common.MinecraftSession;
 import io.netty.buffer.ByteBuf;
 
 import java.util.Collection;

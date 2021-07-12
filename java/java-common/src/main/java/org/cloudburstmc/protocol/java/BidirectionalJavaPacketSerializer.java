@@ -1,6 +1,6 @@
 package org.cloudburstmc.protocol.java;
 
-import com.nukkitx.protocol.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import io.netty.buffer.ByteBuf;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 

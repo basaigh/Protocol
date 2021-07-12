@@ -1,6 +1,6 @@
 package org.cloudburstmc.protocol.java.handler;
 
-import com.nukkitx.protocol.PacketHandler;
+import org.cloudburstmc.protocol.common.PacketHandler;
 
 public interface JavaPacketHandler extends PacketHandler {
 }
