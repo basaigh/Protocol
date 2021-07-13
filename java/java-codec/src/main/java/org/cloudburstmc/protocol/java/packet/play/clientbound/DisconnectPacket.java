@@ -3,8 +3,9 @@ package org.cloudburstmc.protocol.java.packet.play.clientbound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
-import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -14,7 +15,7 @@ public class DisconnectPacket implements JavaPacket<JavaPlayPacketHandler> {
     private Component reason;
 
     @Override
-    public boolean handle(JavaPlayPacketHandler handler) {
+    public PacketSignal handle(JavaPlayPacketHandler handler) {
         return handler.handle(this);
     }
 

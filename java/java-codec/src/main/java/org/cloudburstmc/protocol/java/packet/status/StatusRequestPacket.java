@@ -1,5 +1,6 @@
 package org.cloudburstmc.protocol.java.packet.status;
 
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.handler.JavaStatusPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
@@ -9,7 +10,7 @@ import org.cloudburstmc.protocol.java.packet.type.JavaStatusPacketType;
 public class StatusRequestPacket implements JavaPacket<JavaStatusPacketHandler> {
 
     @Override
-    public boolean handle(JavaStatusPacketHandler handler) {
+    public PacketSignal handle(JavaStatusPacketHandler handler) {
         return handler.handle(this);
     }
 

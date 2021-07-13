@@ -2,15 +2,16 @@ package org.cloudburstmc.protocol.java.packet.play;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.BidirectionalJavaPacket;
+import org.cloudburstmc.protocol.java.annotation.DirectionAvailability;
 import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
-import org.cloudburstmc.protocol.java.packet.DirectionAvailability;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class ResourcePackPacket extends BidirectionalJavaPacket<JavaPlayPacketHandler> {
+public class ResourcePackPacket implements BidirectionalJavaPacket<JavaPlayPacketHandler> {
     @DirectionAvailability(JavaPacketType.Direction.CLIENTBOUND)
     private String url;
 
@@ -21,7 +22,7 @@ public class ResourcePackPacket extends BidirectionalJavaPacket<JavaPlayPacketHa
     private Action action;
 
     @Override
-    public boolean handle(JavaPlayPacketHandler handler) {
+    public PacketSignal handle(JavaPlayPacketHandler handler) {
         return handler.handle(this);
     }
 

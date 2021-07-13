@@ -4,8 +4,9 @@ import com.nukkitx.math.vector.Vector2f;
 import com.nukkitx.math.vector.Vector3d;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -20,7 +21,7 @@ public abstract class MovePlayerPacket implements JavaPacket<JavaPlayPacketHandl
         private Vector3d position;
 
         @Override
-        public boolean handle(JavaPlayPacketHandler handler) {
+        public PacketSignal handle(JavaPlayPacketHandler handler) {
             return handler.handle(this);
         }
 
@@ -37,7 +38,7 @@ public abstract class MovePlayerPacket implements JavaPacket<JavaPlayPacketHandl
         private Vector2f rotation;
 
         @Override
-        public boolean handle(JavaPlayPacketHandler handler) {
+        public PacketSignal handle(JavaPlayPacketHandler handler) {
             return handler.handle(this);
         }
 
@@ -53,7 +54,7 @@ public abstract class MovePlayerPacket implements JavaPacket<JavaPlayPacketHandl
         private Vector2f rotation;
 
         @Override
-        public boolean handle(JavaPlayPacketHandler handler) {
+        public PacketSignal handle(JavaPlayPacketHandler handler) {
             return handler.handle(this);
         }
 

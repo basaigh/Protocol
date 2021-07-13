@@ -1,4 +1,4 @@
-package org.cloudburstmc.protocol.java.packet;
+package org.cloudburstmc.protocol.java.annotation;
 
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 

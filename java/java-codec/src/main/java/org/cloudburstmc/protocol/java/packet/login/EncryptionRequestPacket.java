@@ -2,6 +2,7 @@ package org.cloudburstmc.protocol.java.packet.login;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.handler.JavaLoginPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaLoginPacketType;
@@ -16,7 +17,7 @@ public class EncryptionRequestPacket implements JavaPacket<JavaLoginPacketHandle
     private byte[] verifyToken;
 
     @Override
-    public boolean handle(JavaLoginPacketHandler handler) {
+    public PacketSignal handle(JavaLoginPacketHandler handler) {
         return handler.handle(this);
     }
 

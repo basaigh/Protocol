@@ -1,38 +1,39 @@
 package org.cloudburstmc.protocol.java.packet.handler;
 
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.login.*;
 
 public interface JavaLoginPacketHandler extends JavaPacketHandler {
 
-    default boolean handle(DisconnectPacket packet) {
-        return false;
+    default PacketSignal handle(DisconnectPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(EncryptionRequestPacket packet) {
-        return false;
+    default PacketSignal handle(EncryptionRequestPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(LoginSuccessPacket packet) {
-        return false;
+    default PacketSignal handle(LoginSuccessPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(SetCompressionPacket packet) {
-        return false;
+    default PacketSignal handle(SetCompressionPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(CustomQueryRequestPacket packet) {
-        return false;
+    default PacketSignal handle(CustomQueryRequestPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(LoginStartPacket packet) {
-        return false;
+    default PacketSignal handle(LoginStartPacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(EncryptionResponsePacket packet) {
-        return false;
+    default PacketSignal handle(EncryptionResponsePacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 
-    default boolean handle(CustomQueryResponsePacket packet) {
-        return false;
+    default PacketSignal handle(CustomQueryResponsePacket packet) {
+        return PacketSignal.UNHANDLED;
     }
 }

@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.BidirectionalJavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.BidirectionalJavaPacketSerializer;
 import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.play.CustomPayloadPacket;
 

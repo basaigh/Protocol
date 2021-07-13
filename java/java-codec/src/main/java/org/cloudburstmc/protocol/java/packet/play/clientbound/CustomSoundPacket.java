@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -20,7 +21,7 @@ public class CustomSoundPacket implements JavaPacket<JavaPlayPacketHandler> {
     private float pitch;
 
     @Override
-    public boolean handle(JavaPlayPacketHandler handler) {
+    public PacketSignal handle(JavaPlayPacketHandler handler) {
         return handler.handle(this);
     }
 

@@ -4,9 +4,10 @@ import com.nukkitx.math.vector.Vector3d;
 import com.nukkitx.math.vector.Vector3f;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.data.entity.EntityType;
-import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -23,7 +24,7 @@ public class AddMobPacket implements JavaPacket<JavaPlayPacketHandler> {
     private Vector3d velocity;
 
     @Override
-    public boolean handle(JavaPlayPacketHandler handler) {
+    public PacketSignal handle(JavaPlayPacketHandler handler) {
         return handler.handle(this);
     }
 
