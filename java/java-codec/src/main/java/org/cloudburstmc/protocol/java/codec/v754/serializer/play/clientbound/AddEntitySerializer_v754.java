@@ -4,8 +4,8 @@ import com.nukkitx.network.VarInts;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.entity.spawn.*;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.AddEntityPacket;
 
@@ -14,7 +14,7 @@ public class AddEntitySerializer_v754 implements JavaPacketSerializer<AddEntityP
     public static final AddEntitySerializer_v754 INSTANCE = new AddEntitySerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, AddEntityPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, AddEntityPacket packet) {
         VarInts.writeUnsignedInt(buffer, packet.getEntityId());
         helper.writeUUID(buffer, packet.getUuid());
         VarInts.writeUnsignedInt(buffer, helper.getEntityId(packet.getEntityType()));
@@ -25,7 +25,7 @@ public class AddEntitySerializer_v754 implements JavaPacketSerializer<AddEntityP
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, AddEntityPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, AddEntityPacket packet) {
         packet.setEntityId(VarInts.readUnsignedInt(buffer));
         packet.setUuid(helper.readUUID(buffer));
         packet.setEntityType(helper.getEntityType(VarInts.readUnsignedInt(buffer)));

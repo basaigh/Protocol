@@ -1,4 +1,4 @@
-package org.cloudburstmc.protocol.java.handler;
+package org.cloudburstmc.protocol.java.packet.handler;
 
 import org.cloudburstmc.protocol.java.packet.status.*;
 

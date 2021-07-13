@@ -4,8 +4,8 @@ import com.nukkitx.math.vector.Vector2f;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.PositionFlag;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.PlayerPositionPacket;
 
@@ -14,7 +14,7 @@ public class PlayerPositionSerializer_v754 implements JavaPacketSerializer<Playe
     public static final PlayerPositionSerializer_v754 INSTANCE = new PlayerPositionSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, PlayerPositionPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, PlayerPositionPacket packet) {
         helper.writePosition(buffer, packet.getPosition());
         buffer.writeFloat(packet.getRotation().getX());
         buffer.writeFloat(packet.getRotation().getY());
@@ -27,7 +27,7 @@ public class PlayerPositionSerializer_v754 implements JavaPacketSerializer<Playe
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, PlayerPositionPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, PlayerPositionPacket packet) {
         packet.setPosition(helper.readPosition(buffer));
         packet.setRotation(Vector2f.from(buffer.readFloat(), buffer.readFloat()));
         int flags = buffer.readUnsignedByte();

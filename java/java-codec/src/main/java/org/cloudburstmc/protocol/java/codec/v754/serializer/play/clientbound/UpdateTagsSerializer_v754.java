@@ -6,8 +6,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.UpdateTagsPacket;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class UpdateTagsSerializer_v754 implements JavaPacketSerializer<UpdateTag
     private static final int TAG_TYPE_COUNT = 4;
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, UpdateTagsPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, UpdateTagsPacket packet) throws PacketSerializeException {
         for (Map<String, int[]> tags : packet.getTags().values()) {
             helper.writeArray(buffer, tags.entrySet(), (buf, tag) -> {
                 helper.writeString(buffer, tag.getKey());
@@ -31,7 +31,7 @@ public class UpdateTagsSerializer_v754 implements JavaPacketSerializer<UpdateTag
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, UpdateTagsPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, UpdateTagsPacket packet) throws PacketSerializeException {
         List<Map<String, int[]>> allTags = new ObjectArrayList<>();
         for (int i = 0; i < TAG_TYPE_COUNT; i++) {
             Map<String, int[]> tags = new HashMap<>();

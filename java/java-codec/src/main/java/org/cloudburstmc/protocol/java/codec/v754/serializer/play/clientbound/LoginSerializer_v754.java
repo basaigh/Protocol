@@ -6,8 +6,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.GameType;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.LoginPacket;
 
@@ -16,7 +16,7 @@ public class LoginSerializer_v754 implements JavaPacketSerializer<LoginPacket> {
     public static final LoginSerializer_v754 INSTANCE = new LoginSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, LoginPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, LoginPacket packet) throws PacketSerializeException {
         buffer.writeInt(packet.getEntityId());
         buffer.writeBoolean(packet.isHardcore());
         buffer.writeByte(packet.getGameType().ordinal());
@@ -35,7 +35,7 @@ public class LoginSerializer_v754 implements JavaPacketSerializer<LoginPacket> {
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, LoginPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, LoginPacket packet) throws PacketSerializeException {
         packet.setEntityId(buffer.readInt());
         packet.setHardcore(buffer.readBoolean());
         packet.setGameType(GameType.getById(buffer.readUnsignedByte()));

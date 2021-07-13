@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.SetPlayerTeamPacket;
 
 import static org.cloudburstmc.protocol.java.packet.play.clientbound.SetPlayerTeamPacket.*;
@@ -16,7 +16,7 @@ public class SetPlayerTeamSerializer_v754 implements JavaPacketSerializer<SetPla
     public static final SetPlayerTeamSerializer_v754 INSTANCE = new SetPlayerTeamSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetPlayerTeamPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetPlayerTeamPacket packet) throws PacketSerializeException {
         helper.writeString(buffer, packet.getName());
         buffer.writeByte(packet.getAction().ordinal());
         if (packet.getAction() == Action.CREATE || packet.getAction() == Action.UPDATE) {
@@ -35,7 +35,7 @@ public class SetPlayerTeamSerializer_v754 implements JavaPacketSerializer<SetPla
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetPlayerTeamPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetPlayerTeamPacket packet) throws PacketSerializeException {
         packet.setName(helper.readString(buffer));
         packet.setAction(Action.getById(buffer.readByte()));
         if (packet.getAction() == Action.CREATE || packet.getAction() == Action.UPDATE) {

@@ -4,8 +4,8 @@ import com.nukkitx.network.VarInts;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.command.CommandNode;
 import org.cloudburstmc.protocol.java.data.command.CommandParser;
 import org.cloudburstmc.protocol.java.data.command.CommandType;
@@ -29,7 +29,7 @@ public class CommandsSerializer_v754 implements JavaPacketSerializer<CommandsPac
     private static final int ENTITY_FLAG_PLAYERS_ONLY = 0x02;
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, CommandsPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, CommandsPacket packet) {
         VarInts.writeUnsignedInt(buffer, packet.getNodes().length);
         for (CommandNode node : packet.getNodes()) {
             int flags = node.getType().ordinal() & FLAG_TYPE_MASK;
@@ -168,7 +168,7 @@ public class CommandsSerializer_v754 implements JavaPacketSerializer<CommandsPac
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, CommandsPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, CommandsPacket packet) {
         packet.setNodes(new CommandNode[VarInts.readUnsignedInt(buffer)]);
         for (int i = 0; i < packet.getNodes().length; i++) {
             byte flags = buffer.readByte();

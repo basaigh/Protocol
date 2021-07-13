@@ -6,8 +6,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.CommandSuggestionsPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,7 +15,7 @@ public class CommandSuggestionsSerializer_v754 implements JavaPacketSerializer<C
     public static final CommandSuggestionsSerializer_v754 INSTANCE = new CommandSuggestionsSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, CommandSuggestionsPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, CommandSuggestionsPacket packet) {
         VarInts.writeUnsignedInt(buffer, packet.getTransactionId());
         VarInts.writeUnsignedInt(buffer, packet.getStart());
         VarInts.writeUnsignedInt(buffer, packet.getLength());
@@ -33,7 +33,7 @@ public class CommandSuggestionsSerializer_v754 implements JavaPacketSerializer<C
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, CommandSuggestionsPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, CommandSuggestionsPacket packet) {
         packet.setTransactionId(VarInts.readUnsignedInt(buffer));
         packet.setStart(VarInts.readUnsignedInt(buffer));
         packet.setLength(VarInts.readUnsignedInt(buffer));

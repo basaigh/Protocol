@@ -1,12 +1,12 @@
 package org.cloudburstmc.protocol.java.packet.status;
 
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaStatusPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaStatusPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaStatusPacketType;
 
 // Empty packet
-public class StatusRequestPacket extends JavaPacket<JavaStatusPacketHandler> {
+public class StatusRequestPacket implements JavaPacket<JavaStatusPacketHandler> {
 
     @Override
     public boolean handle(JavaStatusPacketHandler handler) {

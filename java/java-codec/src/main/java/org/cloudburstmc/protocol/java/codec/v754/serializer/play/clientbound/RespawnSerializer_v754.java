@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.GameType;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.RespawnPacket;
 
@@ -14,7 +14,7 @@ public class RespawnSerializer_v754 implements JavaPacketSerializer<RespawnPacke
     public static final RespawnSerializer_v754 INSTANCE = new RespawnSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, RespawnPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, RespawnPacket packet) throws PacketSerializeException {
         helper.writeTag(buffer, packet.getDimension());
         helper.writeKey(buffer, packet.getDimensionType());
         buffer.writeLong(packet.getSeed());
@@ -26,7 +26,7 @@ public class RespawnSerializer_v754 implements JavaPacketSerializer<RespawnPacke
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, RespawnPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, RespawnPacket packet) throws PacketSerializeException {
         packet.setDimension(helper.readTag(buffer));
         packet.setDimensionType(helper.readKey(buffer));
         packet.setSeed(buffer.readLong());

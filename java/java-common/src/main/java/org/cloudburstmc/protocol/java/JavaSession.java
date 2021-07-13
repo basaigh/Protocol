@@ -14,7 +14,7 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.cloudburstmc.protocol.common.MinecraftSession;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
-import org.cloudburstmc.protocol.java.handler.JavaPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPacketHandler;
 import org.cloudburstmc.protocol.java.packet.State;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.DisconnectPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;

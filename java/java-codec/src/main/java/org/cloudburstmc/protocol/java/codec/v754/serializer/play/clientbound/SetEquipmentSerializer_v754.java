@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.entity.Equipment;
 import org.cloudburstmc.protocol.java.data.entity.EquipmentSlot;
 import org.cloudburstmc.protocol.java.data.inventory.ItemStack;
@@ -19,7 +19,7 @@ public class SetEquipmentSerializer_v754 implements JavaPacketSerializer<SetEqui
     public static final SetEquipmentSerializer_v754 INSTANCE = new SetEquipmentSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetEquipmentPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetEquipmentPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getEntityId());
         List<Equipment> equipment = packet.getEquipment();
         for (int i = 0; i < equipment.size(); i++) {
@@ -33,7 +33,7 @@ public class SetEquipmentSerializer_v754 implements JavaPacketSerializer<SetEqui
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetEquipmentPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetEquipmentPacket packet) throws PacketSerializeException {
         packet.setEntityId(helper.readVarInt(buffer));
         boolean hasNextEntry = true;
         List<Equipment> list = new ArrayList<>();

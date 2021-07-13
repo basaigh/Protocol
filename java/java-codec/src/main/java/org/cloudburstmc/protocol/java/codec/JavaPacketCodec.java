@@ -1,4 +1,4 @@
-package org.cloudburstmc.protocol.java;
+package org.cloudburstmc.protocol.java.codec;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.util.ReferenceCountUtil;
@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.common.util.Int2ObjectBiMap;
+import org.cloudburstmc.protocol.java.packet.BidirectionalJavaPacket;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.JavaSession;
 import org.cloudburstmc.protocol.java.packet.State;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 
@@ -30,7 +33,7 @@ public final class JavaPacketCodec {
     private static final InternalLogger log = InternalLoggerFactory.getInstance(JavaPacketCodec.class);
     private final int protocolVersion;
     private final String minecraftVersion;
-    private final JavaPacketHelper helper;
+    private final JavaCodecHelper helper;
     
     private final EnumMap<State, JavaStateCodec> stateCodecs;
 
@@ -54,7 +57,7 @@ public final class JavaPacketCodec {
     public static class Builder {
         private int protocolVersion = -1;
         private String minecraftVersion = null;
-        private JavaPacketHelper helper;
+        private JavaCodecHelper helper;
         private EnumMap<State, JavaStateCodec> stateCodecs = new EnumMap<>(State.class);
 
         public Builder protocolVersion(@Nonnegative int protocolVersion) {
@@ -70,7 +73,7 @@ public final class JavaPacketCodec {
             return this;
         }
 
-        public Builder helper(@Nonnull JavaPacketHelper helper) {
+        public Builder helper(@Nonnull JavaCodecHelper helper) {
             checkNotNull(helper, "helper");
             this.helper = helper;
             return this;
@@ -104,7 +107,7 @@ public final class JavaPacketCodec {
         private final JavaPacketSerializer<JavaPacket<?>>[] serverboundSerializers;
         private final Int2ObjectBiMap<Class<? extends JavaPacket<?>>> serverboundIdBiMap;
 
-        private JavaPacketHelper helper;
+        private JavaCodecHelper helper;
         
         public static Builder builder() {
             return new Builder();

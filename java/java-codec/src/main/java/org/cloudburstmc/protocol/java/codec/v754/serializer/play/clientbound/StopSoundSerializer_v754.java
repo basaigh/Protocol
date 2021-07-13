@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.SoundSource;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.StopSoundPacket;
 
@@ -14,7 +14,7 @@ public class StopSoundSerializer_v754 implements JavaPacketSerializer<StopSoundP
     public static final StopSoundSerializer_v754 INSTANCE = new StopSoundSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, StopSoundPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, StopSoundPacket packet) throws PacketSerializeException {
         int flags = 0;
         if (packet.getSoundSource() != null) {
             flags |= 0x01;
@@ -35,7 +35,7 @@ public class StopSoundSerializer_v754 implements JavaPacketSerializer<StopSoundP
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, StopSoundPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, StopSoundPacket packet) throws PacketSerializeException {
         int flags = buffer.readByte();
         if ((flags & 0x01) != 0) {
             packet.setSoundSource(SoundSource.getById(helper.readVarInt(buffer)));

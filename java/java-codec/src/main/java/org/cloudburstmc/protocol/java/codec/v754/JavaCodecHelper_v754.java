@@ -1,7 +1,7 @@
 package org.cloudburstmc.protocol.java.codec.v754;
 
 import net.kyori.adventure.key.Key;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.data.crafting.RecipeType;
 import org.cloudburstmc.protocol.java.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.java.data.entity.MobEffectType;
@@ -12,8 +12,8 @@ import static org.cloudburstmc.protocol.java.data.entity.EntityType.*;
 import static org.cloudburstmc.protocol.java.data.inventory.ContainerType.*;
 import static org.cloudburstmc.protocol.java.data.world.BlockEntityAction.*;
 
-public class JavaPacketHelper_v754 extends JavaPacketHelper {
-    public static final JavaPacketHelper INSTANCE = new JavaPacketHelper_v754();
+public class JavaCodecHelper_v754 extends JavaCodecHelper {
+    public static final JavaCodecHelper INSTANCE = new JavaCodecHelper_v754();
 
     @Override
     protected void registerEntityTypes() {

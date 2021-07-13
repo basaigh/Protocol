@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.SetBorderPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,7 +13,7 @@ public class SetBorderSerializer_v754 implements JavaPacketSerializer<SetBorderP
     public static final SetBorderSerializer_v754 INSTANCE = new SetBorderSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetBorderPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetBorderPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getType().ordinal());
         switch (packet.getType()) {
             case SET_CENTER:
@@ -48,7 +48,7 @@ public class SetBorderSerializer_v754 implements JavaPacketSerializer<SetBorderP
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetBorderPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetBorderPacket packet) throws PacketSerializeException {
         packet.setType(SetBorderPacket.Type.getById(helper.readVarInt(buffer)));
         switch (packet.getType()) {
             case SET_CENTER:

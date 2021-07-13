@@ -5,8 +5,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.entity.boss.BarAction;
 import org.cloudburstmc.protocol.java.data.entity.boss.BarColor;
 import org.cloudburstmc.protocol.java.data.entity.boss.BarDivision;
@@ -18,7 +18,7 @@ public class BossEventSerializer_v754 implements JavaPacketSerializer<BossEventP
     public static final BossEventSerializer_v754 INSTANCE = new BossEventSerializer_v754();
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, BossEventPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, BossEventPacket packet) {
         helper.writeUUID(buffer, packet.getUuid());
         VarInts.writeUnsignedInt(buffer, packet.getAction().ordinal());
         switch (packet.getAction()) {
@@ -54,7 +54,7 @@ public class BossEventSerializer_v754 implements JavaPacketSerializer<BossEventP
     }
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, BossEventPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, BossEventPacket packet) {
         packet.setUuid(helper.readUUID(buffer));
         BarAction action = BarAction.getById(VarInts.readUnsignedInt(buffer));
         packet.setAction(action);

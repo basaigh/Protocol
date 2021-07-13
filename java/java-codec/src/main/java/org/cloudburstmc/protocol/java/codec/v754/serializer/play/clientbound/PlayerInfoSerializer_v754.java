@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.GameType;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.PlayerInfoPacket;
@@ -18,7 +18,7 @@ public class PlayerInfoSerializer_v754 implements JavaPacketSerializer<PlayerInf
     public static final PlayerInfoSerializer_v754 INSTANCE = new PlayerInfoSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, PlayerInfoPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, PlayerInfoPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getAction().ordinal());
         helper.writeArray(buffer, packet.getEntries(), ((buf, entry) -> {
             switch (packet.getAction()) {
@@ -48,7 +48,7 @@ public class PlayerInfoSerializer_v754 implements JavaPacketSerializer<PlayerInf
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, PlayerInfoPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, PlayerInfoPacket packet) throws PacketSerializeException {
         packet.setAction(PlayerInfoPacket.Action.getById(helper.readVarInt(buffer)));
         PlayerInfoPacket.Entry[] entries = helper.readArray(buffer, new PlayerInfoPacket.Entry[0], buf -> {
             switch (packet.getAction()) {

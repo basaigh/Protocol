@@ -6,8 +6,8 @@ import com.nukkitx.math.vector.Vector3i;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class ExplodePacket extends JavaPacket<JavaPlayPacketHandler> {
+public class ExplodePacket implements JavaPacket<JavaPlayPacketHandler> {
     private Vector3d center;
     private float power;
     /**

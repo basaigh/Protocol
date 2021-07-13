@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.Hand;
 import org.cloudburstmc.protocol.java.packet.play.serverbound.InteractPacket;
 
@@ -14,7 +14,7 @@ public class InteractSerializer_v754 implements JavaPacketSerializer<InteractPac
     public static final InteractSerializer_v754 INSTANCE = new InteractSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, InteractPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, InteractPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getEntityId());
         helper.writeVarInt(buffer, packet.getAction().ordinal());
         if (packet.getAction() != InteractPacket.Action.INTERACT_AT) {
@@ -26,7 +26,7 @@ public class InteractSerializer_v754 implements JavaPacketSerializer<InteractPac
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, InteractPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, InteractPacket packet) throws PacketSerializeException {
         packet.setEntityId(helper.readVarInt(buffer));
         packet.setAction(InteractPacket.Action.getById(helper.readVarInt(buffer)));
         if (packet.getAction() != InteractPacket.Action.INTERACT_AT) {

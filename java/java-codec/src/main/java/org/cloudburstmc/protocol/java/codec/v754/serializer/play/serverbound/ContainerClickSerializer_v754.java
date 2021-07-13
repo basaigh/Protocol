@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.inventory.ClickType;
 import org.cloudburstmc.protocol.java.packet.play.serverbound.ContainerClickPacket;
 
@@ -14,7 +14,7 @@ public final class ContainerClickSerializer_v754 implements JavaPacketSerializer
     public static final ContainerClickSerializer_v754 INSTANCE = new ContainerClickSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, ContainerClickPacket packet)
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, ContainerClickPacket packet)
             throws PacketSerializeException {
         buffer.writeByte(packet.getContainerId());
         buffer.writeShort(packet.getSlot());
@@ -25,7 +25,7 @@ public final class ContainerClickSerializer_v754 implements JavaPacketSerializer
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, ContainerClickPacket packet)
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, ContainerClickPacket packet)
             throws PacketSerializeException {
         packet.setContainerId(buffer.readByte());
         packet.setSlot(buffer.readShort());

@@ -1,7 +1,7 @@
 package org.cloudburstmc.protocol.java.codec.v754;
 
 import lombok.experimental.UtilityClass;
-import org.cloudburstmc.protocol.java.JavaPacketCodec;
+import org.cloudburstmc.protocol.java.codec.JavaPacketCodec;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.handshake.HandshakingSerializer_v754;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.login.*;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.play.*;
@@ -27,7 +27,7 @@ public class Java_v754 {
     public static final JavaPacketCodec V754_CODEC = JavaPacketCodec.builder()
             .protocolVersion(754)
             .minecraftVersion("1.16.4/5")
-            .helper(JavaPacketHelper_v754.INSTANCE)
+            .helper(JavaCodecHelper_v754.INSTANCE)
             .codec(State.HANDSHAKING, JavaPacketCodec.JavaStateCodec.builder()
                     .registerServerbound(HandshakingPacket.class, HandshakingSerializer_v754.INSTANCE, 0)
                     // .registerClientbound(LegacyServerListPingPacket.class, LegacyServerListPingSerializer_v754.INSTANCE, 254) // TODO

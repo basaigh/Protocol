@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.MoveEntityPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,12 +15,12 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
     public static final MoveEntitySerializer_v754<?> INSTANCE = new MoveEntitySerializer_v754<>();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, T packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, T packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getEntityId());
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, T packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, T packet) throws PacketSerializeException {
         packet.setEntityId(helper.readVarInt(buffer));
     }
 
@@ -34,7 +34,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
          public static final Pos INSTANCE = new Pos();
 
         @Override
-        public void serialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.Pos packet) throws PacketSerializeException {
+        public void serialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.Pos packet) throws PacketSerializeException {
             super.serialize(buffer, helper, packet);
             buffer.writeShort((int) (packet.getDelta().getX() * 4096));
             buffer.writeShort((int) (packet.getDelta().getY() * 4096));
@@ -43,7 +43,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.Pos packet) throws PacketSerializeException {
+        public void deserialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.Pos packet) throws PacketSerializeException {
             super.deserialize(buffer, helper, packet);
             packet.setDelta(Vector3d.from(
                     buffer.readShort() / 4096D,
@@ -59,7 +59,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
         public static final PosRot INSTANCE = new PosRot();
 
         @Override
-        public void serialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.PosRot packet) throws PacketSerializeException {
+        public void serialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.PosRot packet) throws PacketSerializeException {
             super.serialize(buffer, helper, packet);
             buffer.writeShort((int) (packet.getDelta().getX() * 4096));
             buffer.writeShort((int) (packet.getDelta().getY() * 4096));
@@ -70,7 +70,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.PosRot packet) throws PacketSerializeException {
+        public void deserialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.PosRot packet) throws PacketSerializeException {
             super.deserialize(buffer, helper, packet);
             packet.setDelta(Vector3d.from(
                     buffer.readShort() / 4096D,
@@ -90,7 +90,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
         public static final Rot INSTANCE = new Rot();
 
         @Override
-        public void serialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.Rot packet) throws PacketSerializeException {
+        public void serialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.Rot packet) throws PacketSerializeException {
             super.serialize(buffer, helper, packet);
             buffer.writeByte((byte) (packet.getRotation().getX() * 256 / 300));
             buffer.writeByte((byte) (packet.getRotation().getY() * 256 / 300));
@@ -98,7 +98,7 @@ public class MoveEntitySerializer_v754<T extends MoveEntityPacket> implements Ja
         }
 
         @Override
-        public void deserialize(ByteBuf buffer, JavaPacketHelper helper, MoveEntityPacket.Rot packet) throws PacketSerializeException {
+        public void deserialize(ByteBuf buffer, JavaCodecHelper helper, MoveEntityPacket.Rot packet) throws PacketSerializeException {
             super.deserialize(buffer, helper, packet);
             packet.setRotation(Vector2f.from(
                     buffer.readByte() * 360 / 256F,

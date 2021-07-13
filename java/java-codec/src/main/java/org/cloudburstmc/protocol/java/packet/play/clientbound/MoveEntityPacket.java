@@ -4,14 +4,14 @@ import com.nukkitx.math.vector.Vector2f;
 import com.nukkitx.math.vector.Vector3d;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public abstract class MoveEntityPacket extends JavaPacket<JavaPlayPacketHandler> {
+public abstract class MoveEntityPacket implements JavaPacket<JavaPlayPacketHandler> {
     private int entityId;
     private boolean onGround;
 

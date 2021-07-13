@@ -3,8 +3,8 @@ package org.cloudburstmc.protocol.java.packet.play.clientbound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class SetPlayerTeamPacket extends JavaPacket<JavaPlayPacketHandler> {
+public class SetPlayerTeamPacket implements JavaPacket<JavaPlayPacketHandler> {
     private String name;
     private Action action;
     private Component displayName;

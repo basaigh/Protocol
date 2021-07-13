@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.key.Key;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.data.inventory.ItemStack;
 
 @EqualsAndHashCode
@@ -12,7 +12,7 @@ public abstract class RecipeType<T> {
     public static final RecipeType<ShapelessRecipe> SHAPELESS = new RecipeType<ShapelessRecipe>() {
 
         @Override
-        public ShapelessRecipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public ShapelessRecipe read(JavaCodecHelper helper, ByteBuf buffer) {
             Key identifier = helper.readKey(buffer);
             String group = helper.readString(buffer);
             RecipeIngredient[] ingredients = helper.readArray(buffer, new RecipeIngredient[0], helper::readRecipeIngredient);
@@ -21,7 +21,7 @@ public abstract class RecipeType<T> {
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, ShapelessRecipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, ShapelessRecipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
             helper.writeString(buffer, recipe.getGroup());
             helper.writeArray(buffer, recipe.getIngredients(), helper::writeRecipeIngredient);
@@ -32,7 +32,7 @@ public abstract class RecipeType<T> {
     public static final RecipeType<ShapedRecipe> SHAPED = new RecipeType<ShapedRecipe>() {
 
         @Override
-        public ShapedRecipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public ShapedRecipe read(JavaCodecHelper helper, ByteBuf buffer) {
             Key identifier = helper.readKey(buffer);
             int width = helper.readVarInt(buffer);
             int height = helper.readVarInt(buffer);
@@ -44,7 +44,7 @@ public abstract class RecipeType<T> {
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, ShapedRecipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, ShapedRecipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
             helper.writeVarInt(buffer, recipe.getWidth());
             helper.writeVarInt(buffer, recipe.getHeight());
@@ -57,12 +57,12 @@ public abstract class RecipeType<T> {
     private static final RecipeType<Recipe> SPECIAL = new RecipeType<Recipe>() {
 
         @Override
-        public Recipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public Recipe read(JavaCodecHelper helper, ByteBuf buffer) {
             return new Recipe(this, helper.readKey(buffer));
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, Recipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, Recipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
         }
     };
@@ -97,7 +97,7 @@ public abstract class RecipeType<T> {
 
     private static final RecipeType<CookingRecipe> COOKING = new RecipeType<CookingRecipe>() {
         @Override
-        public CookingRecipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public CookingRecipe read(JavaCodecHelper helper, ByteBuf buffer) {
             Key identifier = helper.readKey(buffer);
             String group = helper.readString(buffer);
             RecipeIngredient ingredient = helper.readRecipeIngredient(buffer);
@@ -109,7 +109,7 @@ public abstract class RecipeType<T> {
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, CookingRecipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, CookingRecipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
             helper.writeString(buffer, recipe.getGroup());
             helper.writeRecipeIngredient(buffer, recipe.getIngredient());
@@ -130,7 +130,7 @@ public abstract class RecipeType<T> {
     public static final RecipeType<StonecuttingRecipe> STONECUTTING = new RecipeType<StonecuttingRecipe>() {
 
         @Override
-        public StonecuttingRecipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public StonecuttingRecipe read(JavaCodecHelper helper, ByteBuf buffer) {
             Key identifier = helper.readKey(buffer);
             String group = helper.readString(buffer);
             RecipeIngredient ingredient = helper.readRecipeIngredient(buffer);
@@ -140,7 +140,7 @@ public abstract class RecipeType<T> {
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, StonecuttingRecipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, StonecuttingRecipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
             helper.writeString(buffer, recipe.getGroup());
             helper.writeRecipeIngredient(buffer, recipe.getIngredient());
@@ -151,7 +151,7 @@ public abstract class RecipeType<T> {
     public static final RecipeType<SmithingRecipe> SMITHING = new RecipeType<SmithingRecipe>() {
 
         @Override
-        public SmithingRecipe read(JavaPacketHelper helper, ByteBuf buffer) {
+        public SmithingRecipe read(JavaCodecHelper helper, ByteBuf buffer) {
             Key identifier = helper.readKey(buffer);
             RecipeIngredient base = helper.readRecipeIngredient(buffer);
             RecipeIngredient addition = helper.readRecipeIngredient(buffer);
@@ -161,7 +161,7 @@ public abstract class RecipeType<T> {
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, SmithingRecipe recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, SmithingRecipe recipe) {
             helper.writeKey(buffer, recipe.getIdentifier());
             helper.writeRecipeIngredient(buffer, recipe.getBase());
             helper.writeRecipeIngredient(buffer, recipe.getAddition());
@@ -169,21 +169,21 @@ public abstract class RecipeType<T> {
         }
     };
 
-    public abstract T read(JavaPacketHelper helper, ByteBuf buffer);
+    public abstract T read(JavaCodecHelper helper, ByteBuf buffer);
 
-    public abstract void write(JavaPacketHelper helper, ByteBuf buffer, T recipe);
+    public abstract void write(JavaCodecHelper helper, ByteBuf buffer, T recipe);
 
     @AllArgsConstructor
     private static final class WrappedRecipeType<T> extends RecipeType<T> {
         private final RecipeType<T> type;
 
         @Override
-        public T read(JavaPacketHelper helper, ByteBuf buffer) {
+        public T read(JavaCodecHelper helper, ByteBuf buffer) {
             return this.type.read(helper, buffer);
         }
 
         @Override
-        public void write(JavaPacketHelper helper, ByteBuf buffer, T recipe) {
+        public void write(JavaCodecHelper helper, ByteBuf buffer, T recipe) {
             this.type.write(helper, buffer, recipe);
         }
     }

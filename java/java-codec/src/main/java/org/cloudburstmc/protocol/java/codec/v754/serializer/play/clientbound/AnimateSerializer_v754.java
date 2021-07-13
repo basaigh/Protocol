@@ -4,8 +4,8 @@ import com.nukkitx.network.VarInts;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.entity.Animation;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.AnimatePacket;
 
@@ -14,13 +14,13 @@ public class AnimateSerializer_v754 implements JavaPacketSerializer<AnimatePacke
     public static final AnimateSerializer_v754 INSTANCE = new AnimateSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, AnimatePacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, AnimatePacket packet) {
         VarInts.writeUnsignedInt(buffer, packet.getPlayerId());
         buffer.writeByte(packet.getAnimation().ordinal());
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, AnimatePacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, AnimatePacket packet) {
         packet.setPlayerId(VarInts.readUnsignedInt(buffer));
         packet.setAnimation(Animation.getById(buffer.readUnsignedByte()));
     }

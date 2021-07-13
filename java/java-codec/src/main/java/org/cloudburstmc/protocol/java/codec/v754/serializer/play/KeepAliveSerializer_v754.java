@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.java.BidirectionalJavaPacketSerializer;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.play.KeepAlivePacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,12 +13,12 @@ public class KeepAliveSerializer_v754 extends BidirectionalJavaPacketSerializer<
     public static final KeepAliveSerializer_v754 INSTANCE = new KeepAliveSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, KeepAlivePacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, KeepAlivePacket packet) throws PacketSerializeException {
         buffer.writeLong(packet.getId());
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, KeepAlivePacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, KeepAlivePacket packet) throws PacketSerializeException {
         packet.setId(buffer.readLong());
     }
 }

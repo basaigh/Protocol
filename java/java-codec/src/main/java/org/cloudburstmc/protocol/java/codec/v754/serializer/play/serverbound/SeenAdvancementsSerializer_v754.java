@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.SeenAdvancementsAction;
 import org.cloudburstmc.protocol.java.packet.play.serverbound.SeenAdvancementsPacket;
 
@@ -14,7 +14,7 @@ public final class SeenAdvancementsSerializer_v754 implements JavaPacketSerializ
     public static final SeenAdvancementsSerializer_v754 INSTANCE = new SeenAdvancementsSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SeenAdvancementsPacket packet)
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SeenAdvancementsPacket packet)
             throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getAction().ordinal());
         if (packet.getAction() == SeenAdvancementsAction.OPENED_TAB) {
@@ -23,7 +23,7 @@ public final class SeenAdvancementsSerializer_v754 implements JavaPacketSerializ
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SeenAdvancementsPacket packet)
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SeenAdvancementsPacket packet)
             throws PacketSerializeException {
         packet.setAction(SeenAdvancementsAction.getById(helper.readVarInt(buffer)));
         if (packet.getAction() == SeenAdvancementsAction.OPENED_TAB) {

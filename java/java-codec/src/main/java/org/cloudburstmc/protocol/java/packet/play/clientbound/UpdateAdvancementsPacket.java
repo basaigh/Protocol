@@ -4,9 +4,9 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.key.Key;
-import org.cloudburstmc.protocol.java.JavaPacket;
 import org.cloudburstmc.protocol.java.data.Advancement;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class UpdateAdvancementsPacket extends JavaPacket<JavaPlayPacketHandler> {
+public class UpdateAdvancementsPacket implements JavaPacket<JavaPlayPacketHandler> {
     private boolean reset;
     private List<Advancement> added;
     private List<Key> removed;

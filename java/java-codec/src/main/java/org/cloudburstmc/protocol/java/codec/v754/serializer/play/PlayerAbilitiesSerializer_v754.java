@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
 import org.cloudburstmc.protocol.java.BidirectionalJavaPacketSerializer;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.play.PlayerAbilitiesPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,7 +13,7 @@ public class PlayerAbilitiesSerializer_v754 extends BidirectionalJavaPacketSeria
     public static final PlayerAbilitiesSerializer_v754 INSTANCE = new PlayerAbilitiesSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, PlayerAbilitiesPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, PlayerAbilitiesPacket packet) throws PacketSerializeException {
         byte abilities = 0;
         if (packet.isInvulnerable()) abilities |= 0x01;
         if (packet.isFlying()) abilities |= 0x02;
@@ -25,7 +25,7 @@ public class PlayerAbilitiesSerializer_v754 extends BidirectionalJavaPacketSeria
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, PlayerAbilitiesPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, PlayerAbilitiesPacket packet) throws PacketSerializeException {
         byte abilities = buffer.readByte();
         packet.setInvulnerable((abilities & 0x01) != 0);
         packet.setFlying((abilities & 0x02) != 0);

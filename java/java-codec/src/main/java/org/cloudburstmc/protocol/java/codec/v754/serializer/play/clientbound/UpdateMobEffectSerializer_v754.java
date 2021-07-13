@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.UpdateMobEffectPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,7 +13,7 @@ public class UpdateMobEffectSerializer_v754 implements JavaPacketSerializer<Upda
     public static final UpdateMobEffectSerializer_v754 INSTANCE = new UpdateMobEffectSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, UpdateMobEffectPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, UpdateMobEffectPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getEntityId());
         buffer.writeByte(helper.getMobEffectId(packet.getMobEffect()));
         buffer.writeByte(packet.getAmplifier());
@@ -32,7 +32,7 @@ public class UpdateMobEffectSerializer_v754 implements JavaPacketSerializer<Upda
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, UpdateMobEffectPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, UpdateMobEffectPacket packet) throws PacketSerializeException {
         packet.setEntityId(helper.readVarInt(buffer));
         packet.setMobEffect(helper.getMobEffect(buffer.readByte()));
         packet.setAmplifier(buffer.readByte());

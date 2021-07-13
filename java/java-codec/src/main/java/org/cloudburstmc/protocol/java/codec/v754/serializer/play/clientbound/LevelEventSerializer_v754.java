@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.LevelEventType;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.LevelEventPacket;
 
@@ -14,7 +14,7 @@ public class LevelEventSerializer_v754 implements JavaPacketSerializer<LevelEven
     public static final LevelEventSerializer_v754 INSTANCE = new LevelEventSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, LevelEventPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, LevelEventPacket packet) throws PacketSerializeException {
         buffer.writeInt(packet.getType().ordinal());
         helper.writeBlockPosition(buffer, packet.getPosition());
         buffer.writeInt(packet.getData());
@@ -22,7 +22,7 @@ public class LevelEventSerializer_v754 implements JavaPacketSerializer<LevelEven
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, LevelEventPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, LevelEventPacket packet) throws PacketSerializeException {
         packet.setType(LevelEventType.getById(buffer.readInt()));
         packet.setPosition(helper.readBlockPosition(buffer));
         packet.setData(buffer.readInt());

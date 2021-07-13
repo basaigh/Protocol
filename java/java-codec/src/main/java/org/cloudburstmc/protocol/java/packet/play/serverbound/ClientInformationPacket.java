@@ -2,16 +2,16 @@ package org.cloudburstmc.protocol.java.packet.play.serverbound;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.JavaPacket;
 import org.cloudburstmc.protocol.java.data.Hand;
 import org.cloudburstmc.protocol.java.data.text.ChatVisibility;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class ClientInformationPacket extends JavaPacket<JavaPlayPacketHandler> {
+public class ClientInformationPacket implements JavaPacket<JavaPlayPacketHandler> {
     private String language;
     private int viewDistance;
     private ChatVisibility visibility;

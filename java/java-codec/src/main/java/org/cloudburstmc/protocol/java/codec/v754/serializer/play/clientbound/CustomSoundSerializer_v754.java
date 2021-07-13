@@ -7,8 +7,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.CustomSoundPacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +16,7 @@ public class CustomSoundSerializer_v754 implements JavaPacketSerializer<CustomSo
     public static final CustomSoundSerializer_v754 INSTANCE = new CustomSoundSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, CustomSoundPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, CustomSoundPacket packet) {
         helper.writeString(buffer, packet.getName().asString());
         VarInts.writeUnsignedInt(buffer, packet.getSource().ordinal());
         buffer.writeInt((int) (packet.getPosition().getX() * 8));
@@ -27,7 +27,7 @@ public class CustomSoundSerializer_v754 implements JavaPacketSerializer<CustomSo
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, CustomSoundPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, CustomSoundPacket packet) {
         packet.setName(Key.key(helper.readString(buffer)));
         packet.setSource(Sound.Source.values()[VarInts.readUnsignedInt(buffer)]);
         packet.setPosition(Vector3d.from(

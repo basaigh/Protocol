@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.Advancement;
 import org.cloudburstmc.protocol.java.data.DisplayInfo;
 import org.cloudburstmc.protocol.java.data.inventory.ItemStack;
@@ -26,7 +26,7 @@ public class UpdateAdvancementsSerializer_v754 implements JavaPacketSerializer<U
     public static final UpdateAdvancementsSerializer_v754 INSTANCE = new UpdateAdvancementsSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, UpdateAdvancementsPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, UpdateAdvancementsPacket packet) throws PacketSerializeException {
         buffer.writeBoolean(packet.isReset());
         helper.writeArray(buffer, packet.getAdded(), (buf, advancement) -> {
             helper.writeKey(buffer, advancement.getId());
@@ -74,7 +74,7 @@ public class UpdateAdvancementsSerializer_v754 implements JavaPacketSerializer<U
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, UpdateAdvancementsPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, UpdateAdvancementsPacket packet) throws PacketSerializeException {
         packet.setReset(buffer.readBoolean());
         packet.setAdded(new ObjectArrayList<>(
                 helper.readArray(buffer, new Advancement[0], (buf) -> {

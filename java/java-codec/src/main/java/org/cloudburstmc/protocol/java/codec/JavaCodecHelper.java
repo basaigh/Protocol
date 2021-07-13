@@ -1,4 +1,4 @@
-package org.cloudburstmc.protocol.java;
+package org.cloudburstmc.protocol.java.codec;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -40,8 +40,8 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.function.*;
 
-public abstract class JavaPacketHelper {
-    protected static final InternalLogger log = InternalLoggerFactory.getInstance(JavaPacketHelper.class);
+public abstract class JavaCodecHelper {
+    protected static final InternalLogger log = InternalLoggerFactory.getInstance(JavaCodecHelper.class);
 
     protected final Int2ObjectBiMap<EntityType> entityTypes = new Int2ObjectBiMap<>();
     protected final Int2ObjectBiMap<BlockEntityAction> blockEntityActions = new Int2ObjectBiMap<>();
@@ -52,7 +52,7 @@ public abstract class JavaPacketHelper {
     protected final Int2ObjectBiMap<MobEffectType> mobEffects = new Int2ObjectBiMap<>();
     protected final BiMap<Key, RecipeType<? extends Recipe>> recipeTypes = HashBiMap.create();
 
-    protected JavaPacketHelper() {
+    protected JavaCodecHelper() {
         this.registerEntityTypes();
         this.registerBlockEntityActions();
         this.registerContainerTypes();
@@ -388,27 +388,27 @@ public abstract class JavaPacketHelper {
         Helper array serialization
      */
 
-    public <T> void readArray(ByteBuf buffer, Collection<T> array, BiFunction<ByteBuf, JavaPacketHelper, T> function) {
+    public <T> void readArray(ByteBuf buffer, Collection<T> array, BiFunction<ByteBuf, JavaCodecHelper, T> function) {
         int length = VarInts.readUnsignedInt(buffer);
         for (int i = 0; i < length; i++) {
             array.add(function.apply(buffer, this));
         }
     }
 
-    public <T> void writeArray(ByteBuf buffer, Collection<T> array, TriConsumer<ByteBuf, JavaPacketHelper, T> biConsumer) {
+    public <T> void writeArray(ByteBuf buffer, Collection<T> array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer) {
         VarInts.writeUnsignedInt(buffer, array.size());
         for (T val : array) {
             biConsumer.accept(buffer, this, val);
         }
     }
 
-    public <T> T[] readArray(ByteBuf buffer, T[] array, BiFunction<ByteBuf, JavaPacketHelper, T> function) {
+    public <T> T[] readArray(ByteBuf buffer, T[] array, BiFunction<ByteBuf, JavaCodecHelper, T> function) {
         ObjectArrayList<T> list = new ObjectArrayList<>();
         readArray(buffer, list, function);
         return list.toArray(array);
     }
 
-    public <T> void writeArray(ByteBuf buffer, T[] array, TriConsumer<ByteBuf, JavaPacketHelper, T> biConsumer) {
+    public <T> void writeArray(ByteBuf buffer, T[] array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer) {
         VarInts.writeUnsignedInt(buffer, array.length);
         for (T val : array) {
             biConsumer.accept(buffer, this, val);

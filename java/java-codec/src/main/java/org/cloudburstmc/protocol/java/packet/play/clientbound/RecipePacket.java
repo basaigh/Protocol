@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.key.Key;
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class RecipePacket extends JavaPacket<JavaPlayPacketHandler> {
+public class RecipePacket implements JavaPacket<JavaPlayPacketHandler> {
     private State state;
     private final List<Key> recipes = new ObjectArrayList<>();
     private final List<Key> highlightedRecipes = new ObjectArrayList<>();

@@ -4,8 +4,8 @@ import com.nukkitx.math.vector.Vector2f;
 import com.nukkitx.math.vector.Vector3d;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.BidirectionalJavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.BidirectionalJavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 

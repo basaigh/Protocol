@@ -2,9 +2,9 @@ package org.cloudburstmc.protocol.java.packet.play;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.BidirectionalJavaPacket;
+import org.cloudburstmc.protocol.java.packet.BidirectionalJavaPacket;
 import org.cloudburstmc.protocol.java.data.world.Difficulty;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
 import org.cloudburstmc.protocol.java.packet.DirectionAvailability;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;

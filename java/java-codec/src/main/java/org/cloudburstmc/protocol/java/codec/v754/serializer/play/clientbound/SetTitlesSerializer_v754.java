@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.SetTitlesPacket;
 
 import static org.cloudburstmc.protocol.java.packet.play.clientbound.SetTitlesPacket.Type;
@@ -15,7 +15,7 @@ public class SetTitlesSerializer_v754 implements JavaPacketSerializer<SetTitlesP
     public static final SetTitlesSerializer_v754 INSTANCE = new SetTitlesSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetTitlesPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetTitlesPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getType().ordinal());
         switch (packet.getType()) {
             case TITLE:
@@ -34,7 +34,7 @@ public class SetTitlesSerializer_v754 implements JavaPacketSerializer<SetTitlesP
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetTitlesPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetTitlesPacket packet) throws PacketSerializeException {
         packet.setType(Type.getById(helper.readVarInt(buffer)));
         switch (packet.getType()) {
             case TITLE:

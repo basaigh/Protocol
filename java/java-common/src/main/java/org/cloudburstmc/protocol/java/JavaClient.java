@@ -11,7 +11,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 import lombok.Setter;
-import org.cloudburstmc.protocol.java.handler.JavaStatusPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaStatusPacketHandler;
 import org.cloudburstmc.protocol.java.packet.State;
 import org.cloudburstmc.protocol.java.packet.handshake.HandshakingPacket;
 import org.cloudburstmc.protocol.java.packet.status.StatusRequestPacket;

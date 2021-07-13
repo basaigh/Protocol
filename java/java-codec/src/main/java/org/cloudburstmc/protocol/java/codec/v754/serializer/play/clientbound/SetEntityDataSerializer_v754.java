@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.entity.EntityData;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.SetEntityDataPacket;
 
@@ -17,7 +17,7 @@ public class SetEntityDataSerializer_v754 implements JavaPacketSerializer<SetEnt
     public static final SetEntityDataSerializer_v754 INSTANCE = new SetEntityDataSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetEntityDataPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetEntityDataPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getEntityId());
         for (EntityData<?> data : packet.getEntityData()) {
             buffer.writeByte(data.getId());
@@ -28,7 +28,7 @@ public class SetEntityDataSerializer_v754 implements JavaPacketSerializer<SetEnt
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetEntityDataPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetEntityDataPacket packet) throws PacketSerializeException {
         packet.setEntityId(helper.readVarInt(buffer));
         List<EntityData<?>> entityData = new ObjectArrayList<>();
         int dataId;

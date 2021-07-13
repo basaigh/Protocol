@@ -3,8 +3,8 @@ package org.cloudburstmc.protocol.java.codec.v754.serializer.play.clientbound;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.inventory.ItemStack;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.ContainerSetContentPacket;
 
@@ -13,7 +13,7 @@ public class ContainerSetContentSerializer_v754 implements JavaPacketSerializer<
     public static final ContainerSetContentSerializer_v754 INSTANCE = new ContainerSetContentSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, ContainerSetContentPacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, ContainerSetContentPacket packet) {
         buffer.writeByte(packet.getContainerId());
         buffer.writeShort(packet.getItems().length);
         for (ItemStack item : packet.getItems()) {
@@ -22,7 +22,7 @@ public class ContainerSetContentSerializer_v754 implements JavaPacketSerializer<
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, ContainerSetContentPacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, ContainerSetContentPacket packet) {
         packet.setContainerId(buffer.readUnsignedByte());
         packet.setItems(new ItemStack[buffer.readShort()]);
         ItemStack[] items = packet.getItems();

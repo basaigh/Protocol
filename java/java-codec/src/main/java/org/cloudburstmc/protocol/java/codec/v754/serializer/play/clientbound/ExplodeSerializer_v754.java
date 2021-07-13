@@ -6,8 +6,8 @@ import com.nukkitx.math.vector.Vector3i;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.ExplodePacket;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,7 +15,7 @@ public class ExplodeSerializer_v754 implements JavaPacketSerializer<ExplodePacke
     public static ExplodeSerializer_v754 INSTANCE = new ExplodeSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, ExplodePacket packet) {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, ExplodePacket packet) {
         buffer.writeFloat((float) packet.getCenter().getX());
         buffer.writeFloat((float) packet.getCenter().getY());
         buffer.writeFloat((float) packet.getCenter().getZ());
@@ -33,7 +33,7 @@ public class ExplodeSerializer_v754 implements JavaPacketSerializer<ExplodePacke
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, ExplodePacket packet) {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, ExplodePacket packet) {
         packet.setCenter(Vector3d.from(
                 buffer.readFloat(),
                 buffer.readFloat(),

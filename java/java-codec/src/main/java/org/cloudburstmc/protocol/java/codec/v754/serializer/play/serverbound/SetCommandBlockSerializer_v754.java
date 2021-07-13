@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.serverbound.SetCommandBlockPacket;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -13,7 +13,7 @@ public class SetCommandBlockSerializer_v754 implements JavaPacketSerializer<SetC
     public static final SetCommandBlockSerializer_v754 INSTANCE = new SetCommandBlockSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, SetCommandBlockPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, SetCommandBlockPacket packet) throws PacketSerializeException {
         helper.writeBlockPosition(buffer, packet.getPosition());
         helper.writeString(buffer, packet.getCommand());
         helper.writeVarInt(buffer, packet.getMode().ordinal());
@@ -31,7 +31,7 @@ public class SetCommandBlockSerializer_v754 implements JavaPacketSerializer<SetC
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, SetCommandBlockPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, SetCommandBlockPacket packet) throws PacketSerializeException {
         packet.setPosition(helper.readBlockPosition(buffer));
         packet.setCommand(helper.readString(buffer));
         byte flags = buffer.readByte();

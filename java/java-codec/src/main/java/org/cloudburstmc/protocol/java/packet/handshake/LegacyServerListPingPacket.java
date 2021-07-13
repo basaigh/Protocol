@@ -2,18 +2,19 @@ package org.cloudburstmc.protocol.java.packet.handshake;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.cloudburstmc.protocol.java.JavaPacket;
-import org.cloudburstmc.protocol.java.handler.JavaHandshakePacketHandler;
+import org.cloudburstmc.protocol.common.PacketSignal;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
+import org.cloudburstmc.protocol.java.packet.handler.JavaHandshakePacketHandler;
 import org.cloudburstmc.protocol.java.packet.type.JavaHandshakePacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class LegacyServerListPingPacket extends JavaPacket<JavaHandshakePacketHandler> {
+public class LegacyServerListPingPacket implements JavaPacket<JavaHandshakePacketHandler> {
     private byte payload;
 
     @Override
-    public boolean handle(JavaHandshakePacketHandler handler) {
+    public PacketSignal handle(JavaHandshakePacketHandler handler) {
         return handler.handle(this);
     }
 

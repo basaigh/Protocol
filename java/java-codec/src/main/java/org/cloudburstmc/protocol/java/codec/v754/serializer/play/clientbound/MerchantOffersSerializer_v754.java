@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.MerchantOffer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.MerchantOffersPacket;
 
@@ -14,7 +14,7 @@ public class MerchantOffersSerializer_v754 implements JavaPacketSerializer<Merch
     public static final MerchantOffersSerializer_v754 INSTANCE = new MerchantOffersSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, MerchantOffersPacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, MerchantOffersPacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getContainerId());
         buffer.writeByte(packet.getOffers().size());
         for (MerchantOffer offer : packet.getOffers()) {
@@ -36,7 +36,7 @@ public class MerchantOffersSerializer_v754 implements JavaPacketSerializer<Merch
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, MerchantOffersPacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, MerchantOffersPacket packet) throws PacketSerializeException {
         packet.setContainerId(helper.readVarInt(buffer));
         for (int i = 0; i < buffer.readByte(); i++) {
             packet.getOffers().add(new MerchantOffer(

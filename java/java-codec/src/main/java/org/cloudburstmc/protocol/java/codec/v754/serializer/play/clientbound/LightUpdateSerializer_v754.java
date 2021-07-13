@@ -4,8 +4,8 @@ import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
-import org.cloudburstmc.protocol.java.JavaPacketHelper;
-import org.cloudburstmc.protocol.java.JavaPacketSerializer;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
+import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.clientbound.LightUpdatePacket;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class LightUpdateSerializer_v754 implements JavaPacketSerializer<LightUpd
     public static final LightUpdateSerializer_v754 INSTANCE = new LightUpdateSerializer_v754();
 
     @Override
-    public void serialize(ByteBuf buffer, JavaPacketHelper helper, LightUpdatePacket packet) throws PacketSerializeException {
+    public void serialize(ByteBuf buffer, JavaCodecHelper helper, LightUpdatePacket packet) throws PacketSerializeException {
         helper.writeVarInt(buffer, packet.getX());
         helper.writeVarInt(buffer, packet.getZ());
         buffer.writeBoolean(packet.isTrustEdges());
@@ -33,7 +33,7 @@ public class LightUpdateSerializer_v754 implements JavaPacketSerializer<LightUpd
     }
 
     @Override
-    public void deserialize(ByteBuf buffer, JavaPacketHelper helper, LightUpdatePacket packet) throws PacketSerializeException {
+    public void deserialize(ByteBuf buffer, JavaCodecHelper helper, LightUpdatePacket packet) throws PacketSerializeException {
         packet.setX(helper.readVarInt(buffer));
         packet.setZ(helper.readVarInt(buffer));
         packet.setTrustEdges(buffer.readBoolean());

@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import net.kyori.adventure.text.Component;
-import org.cloudburstmc.protocol.java.JavaPacket;
 import org.cloudburstmc.protocol.java.data.GameType;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
-import org.cloudburstmc.protocol.java.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.handler.JavaPlayPacketHandler;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class PlayerInfoPacket extends JavaPacket<JavaPlayPacketHandler> {
+public class PlayerInfoPacket implements JavaPacket<JavaPlayPacketHandler> {
     private Action action;
     private final List<Entry> entries = new ObjectArrayList<>();
 
