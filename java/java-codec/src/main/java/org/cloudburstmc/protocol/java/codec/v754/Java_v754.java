@@ -1,7 +1,8 @@
 package org.cloudburstmc.protocol.java.codec.v754;
 
-import lombok.experimental.UtilityClass;
-import org.cloudburstmc.protocol.java.codec.JavaPacketCodec;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.cloudburstmc.protocol.java.codec.JavaCodec;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.handshake.HandshakingSerializer_v754;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.login.*;
 import org.cloudburstmc.protocol.java.codec.v754.serializer.play.*;
@@ -22,23 +23,24 @@ import org.cloudburstmc.protocol.java.packet.status.PongPacket;
 import org.cloudburstmc.protocol.java.packet.status.StatusRequestPacket;
 import org.cloudburstmc.protocol.java.packet.status.StatusResponsePacket;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Java_v754 {
-    public static final JavaPacketCodec V754_CODEC = JavaPacketCodec.builder()
+
+    public static final JavaCodec V754_CODEC = JavaCodec.builder()
             .protocolVersion(754)
             .minecraftVersion("1.16.4/5")
             .helper(JavaCodecHelper_v754.INSTANCE)
-            .codec(State.HANDSHAKING, JavaPacketCodec.JavaStateCodec.builder()
+            .codec(State.HANDSHAKING, JavaCodec.JavaStateCodec.builder()
                     .registerServerbound(HandshakingPacket.class, HandshakingSerializer_v754.INSTANCE, 0)
                     // .registerClientbound(LegacyServerListPingPacket.class, LegacyServerListPingSerializer_v754.INSTANCE, 254) // TODO
                     .build())
-            .codec(State.STATUS, JavaPacketCodec.JavaStateCodec.builder()
+            .codec(State.STATUS, JavaCodec.JavaStateCodec.builder()
                     .registerClientbound(StatusResponsePacket.class, StatusResponseSerializer_v754.INSTANCE, 0)
                     .registerClientbound(PongPacket.class, PongSerializer_v754.INSTANCE, 1)
                     .registerServerbound(StatusRequestPacket.class, StatusRequestSerializer_v754.INSTANCE, 0)
                     .registerServerbound(PingPacket.class, PingSerializer_v754.INSTANCE, 1)
                     .build())
-            .codec(State.LOGIN, JavaPacketCodec.JavaStateCodec.builder()
+            .codec(State.LOGIN, JavaCodec.JavaStateCodec.builder()
                     .registerClientbound(org.cloudburstmc.protocol.java.packet.login.DisconnectPacket.class, org.cloudburstmc.protocol.java.codec.v754.serializer.login.DisconnectSerializer_v754.INSTANCE, 0)
                     .registerClientbound(EncryptionRequestPacket.class, EncryptionRequestSerializer_v754.INSTANCE, 1)
                     .registerClientbound(LoginSuccessPacket.class, LoginSuccessSerializer_v754.INSTANCE, 2)
@@ -48,7 +50,7 @@ public class Java_v754 {
                     .registerServerbound(EncryptionResponsePacket.class, EncryptionResponseSerializer_v754.INSTANCE, 1)
                     .registerServerbound(CustomQueryResponsePacket.class, CustomQueryResponseSerializer_v754.INSTANCE, 2)
                     .build())
-            .codec(State.PLAY, JavaPacketCodec.JavaStateCodec.builder()
+            .codec(State.PLAY, JavaCodec.JavaStateCodec.builder()
                     .registerClientbound(AddEntityPacket.class, AddEntitySerializer_v754.INSTANCE, 0)
                     .registerClientbound(AddExperienceOrbPacket.class, AddExperienceOrbSerializer_v754.INSTANCE, 1)
                     .registerClientbound(AddMobPacket.class, AddMobSerializer_v754.INSTANCE, 2)

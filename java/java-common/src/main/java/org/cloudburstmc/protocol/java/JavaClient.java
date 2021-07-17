@@ -11,6 +11,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 import lombok.Setter;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.packet.handler.JavaStatusPacketHandler;
 import org.cloudburstmc.protocol.java.packet.State;
 import org.cloudburstmc.protocol.java.packet.handshake.HandshakingPacket;
@@ -131,10 +132,10 @@ public class JavaClient extends Java {
             this.session.sendPacket(new StatusRequestPacket());
             this.session.setPacketHandler(new JavaStatusPacketHandler() {
                 @Override
-                public boolean handle(StatusResponsePacket packet) {
+                public PacketSignal handle(StatusResponsePacket packet) {
                     response.accept(packet);
                     pongFuture.complete(packet.getResponse());
-                    return true;
+                    return PacketSignal.HANDLED;
                 }
             });
         }));
