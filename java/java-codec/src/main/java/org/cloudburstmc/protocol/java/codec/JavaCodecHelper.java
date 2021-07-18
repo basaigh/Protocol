@@ -1,23 +1,12 @@
 package org.cloudburstmc.protocol.java.codec;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.nukkitx.math.vector.*;
-import com.nukkitx.nbt.NBTInputStream;
-import com.nukkitx.nbt.NBTOutputStream;
-import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.network.VarInts;
-import com.nukkitx.network.util.Preconditions;
+import com.nukkitx.math.vector.Vector2f;
+import com.nukkitx.math.vector.Vector3d;
+import com.nukkitx.math.vector.Vector3f;
+import com.nukkitx.math.vector.Vector3i;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.util.internal.logging.InternalLogger;
-import io.netty.util.internal.logging.InternalLoggerFactory;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.cloudburstmc.protocol.common.util.Int2ObjectBiMap;
 import org.cloudburstmc.protocol.common.util.TriConsumer;
 import org.cloudburstmc.protocol.java.data.Direction;
 import org.cloudburstmc.protocol.java.data.crafting.Recipe;
@@ -27,577 +16,179 @@ import org.cloudburstmc.protocol.java.data.entity.*;
 import org.cloudburstmc.protocol.java.data.inventory.ContainerType;
 import org.cloudburstmc.protocol.java.data.inventory.ItemStack;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
-import org.cloudburstmc.protocol.java.data.profile.property.Property;
-import org.cloudburstmc.protocol.java.data.profile.property.PropertyMap;
 import org.cloudburstmc.protocol.java.data.world.BlockEntityAction;
 import org.cloudburstmc.protocol.java.data.world.Particle;
 import org.cloudburstmc.protocol.java.data.world.ParticleType;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.function.*;
 
-public abstract class JavaCodecHelper {
-    protected static final InternalLogger log = InternalLoggerFactory.getInstance(JavaCodecHelper.class);
+public interface JavaCodecHelper {
+    int readVarInt(ByteBuf buffer);
 
-    protected final Int2ObjectBiMap<EntityType> entityTypes = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<BlockEntityAction> blockEntityActions = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<ContainerType> containerTypes = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<EntityDataType<?>> entityDataTypes = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<Pose> poses = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<ParticleType> particles = new Int2ObjectBiMap<>();
-    protected final Int2ObjectBiMap<MobEffectType> mobEffects = new Int2ObjectBiMap<>();
-    protected final BiMap<Key, RecipeType<? extends Recipe>> recipeTypes = HashBiMap.create();
+    void writeVarInt(ByteBuf buffer, int varint);
 
-    protected JavaCodecHelper() {
-        this.registerEntityTypes();
-        this.registerBlockEntityActions();
-        this.registerContainerTypes();
-        this.registerEntityDataTypes();
-        this.registerPoses();
-        this.registerParticles();
-        this.registerMobEffects();
-        this.registerRecipeTypes();
-    }
+    long readVarLong(ByteBuf buffer);
 
-    public int readVarInt(ByteBuf buffer) {
-        // Don't use the signed version! Only Bedrock knows that concept
-        return VarInts.readUnsignedInt(buffer);
-    }
+    void writeVarLong(ByteBuf buffer, long varlong);
 
-    public void writeVarInt(ByteBuf buffer, int varint) {
-        // Don't use the signed version! Only Bedrock knows that concept
-        VarInts.writeUnsignedInt(buffer, varint);
-    }
+    byte[] readByteArray(ByteBuf buffer);
 
-    public long readVarLong(ByteBuf buffer) {
-        return VarInts.readUnsignedLong(buffer);
-    }
+    void writeByteArray(ByteBuf buffer, byte[] bytes);
 
-    public void writeVarLong(ByteBuf buffer, long varlong) {
-        VarInts.writeUnsignedLong(buffer, varlong);
-    }
+    String readString(ByteBuf buffer);
 
-    public byte[] readByteArray(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        int length = VarInts.readUnsignedInt(buffer);
-        Preconditions.checkArgument(buffer.isReadable(length),
-                 "Tried to read %s bytes but only has %s readable", length, buffer.readableBytes());
-        byte[] bytes = new byte[length];
-        buffer.readBytes(bytes);
-        return bytes;
-    }
+    void writeString(ByteBuf buffer, String string);
 
-    public void writeByteArray(ByteBuf buffer, byte[] bytes) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(bytes, "bytes");
-        VarInts.writeUnsignedInt(buffer, bytes.length);
-        buffer.writeBytes(bytes);
-    }
+    Key readKey(ByteBuf buffer);
 
-    public String readString(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return new String(readByteArray(buffer), StandardCharsets.UTF_8);
-    }
+    void writeKey(ByteBuf buffer, Key key);
 
-    public void writeString(ByteBuf buffer, String string) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(string, "string");
-        writeByteArray(buffer, string.getBytes(StandardCharsets.UTF_8));
-    }
+    GameProfile readGameProfile(ByteBuf buffer);
 
-    public Key readKey(ByteBuf buffer) {
-        return Key.key(this.readString(buffer));
-    }
+    GameProfile readGameProfile(ByteBuf buffer, boolean readProperties);
 
-    public void writeKey(ByteBuf buffer, Key key) {
-        this.writeString(buffer, key.asString());
-    }
+    void writeGameProfile(ByteBuf buffer, GameProfile profile);
 
-    public GameProfile readGameProfile(ByteBuf buffer) {
-        return this.readGameProfile(buffer, false);
-    }
+    void writeGameProfile(ByteBuf buffer, GameProfile profile, boolean writeProperties);
 
-    public GameProfile readGameProfile(ByteBuf buffer, boolean readProperties) {
-        UUID id = readUUID(buffer);
-        String name = null;
-        if (readProperties && buffer.readableBytes() > 0) {
-            name = readString(buffer);
-        }
-        GameProfile profile = new GameProfile(id, name);
-        if (!readProperties || buffer.readableBytes() <= 0) {
-            return profile;
-        }
-        // Read properties
-        int propertiesAmt = VarInts.readUnsignedInt(buffer);
-        PropertyMap properties = new PropertyMap();
-        for (int i = 0; i < propertiesAmt; i++) {
-            Property property = new Property(readString(buffer), readString(buffer), buffer.readBoolean() ? readString(buffer) : null);
-            properties.put(property.getName(), property);
-        }
-        profile.setProperties(properties);
-        return profile;
-    }
+    UUID readUUID(ByteBuf buffer);
 
-    public void writeGameProfile(ByteBuf buffer, GameProfile profile) {
-        writeGameProfile(buffer, profile, false);
-    }
+    void writeUUID(ByteBuf buffer, UUID uuid);
 
-    public void writeGameProfile(ByteBuf buffer, GameProfile profile, boolean writeProperties) {
-        writeUUID(buffer, profile.getId());
-        writeString(buffer, profile.getName() == null ? "" : profile.getName());
-        if (writeProperties && profile.getProperties() != null && !profile.getProperties().isEmpty()) {
-            VarInts.writeUnsignedInt(buffer, profile.getProperties().size());
-            for (Property property : profile.getProperties().values()) {
-                writeString(buffer, property.getName());
-                writeString(buffer, property.getValue());
-                buffer.writeBoolean(property.getSignature() != null);
-                if (property.getSignature() != null) {
-                    writeString(buffer, property.getSignature());
-                }
-            }
-        }
-    }
+    Vector3d readPosition(ByteBuf buffer);
 
-    public UUID readUUID(ByteBuf buffer) {
-        return new UUID(buffer.readLong(), buffer.readLong());
-    }
+    void writePosition(ByteBuf buffer, Vector3d vector3d);
 
-    public void writeUUID(ByteBuf buffer, UUID uuid) {
-        buffer.writeLong(uuid.getMostSignificantBits());
-        buffer.writeLong(uuid.getLeastSignificantBits());
-    }
+    Vector3d readVelocity(ByteBuf buffer);
 
-    public Vector3d readPosition(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        double x = buffer.readDouble();
-        double y = buffer.readDouble();
-        double z = buffer.readDouble();
-        return Vector3d.from(x, y, z);
-    }
+    void writeVelocity(ByteBuf buffer, Vector3d vector3d);
 
-    public void writePosition(ByteBuf buffer, Vector3d vector3d) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector3d, "vector3d");
-        buffer.writeDouble(vector3d.getX());
-        buffer.writeDouble(vector3d.getY());
-        buffer.writeDouble(vector3d.getZ());
-    }
+    Vector2f readRotation2f(ByteBuf buffer);
 
-    public Vector3d readVelocity(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        double x = buffer.readShort() / 8000D;
-        double y = buffer.readShort() / 8000D;
-        double z = buffer.readShort() / 8000D;
-        return Vector3d.from(x, y, z);
-    }
+    Vector3f readRotation3f(ByteBuf buffer);
 
-    public void writeVelocity(ByteBuf buffer, Vector3d vector3d) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector3d, "vector3d");
-        buffer.writeDouble(vector3d.getX() * 8000D);
-        buffer.writeDouble(vector3d.getY() * 8000D);
-        buffer.writeDouble(vector3d.getZ() * 8000D);
-    }
+    void writeRotation2f(ByteBuf buffer, Vector2f vector2f);
 
-    public Vector2f readRotation2f(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        float pitch = buffer.readByte() * 360 / 256F;
-        float yaw = buffer.readByte() * 360 / 256F;
-        return Vector2f.from(pitch, yaw);
-    }
+    void writeRotation3f(ByteBuf buffer, Vector3f vector3f);
 
-    public Vector3f readRotation3f(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        float pitch = buffer.readByte() * 360 / 256F;
-        float yaw = buffer.readByte() * 360 / 256F;
-        float headYaw = buffer.readByte() * 360 / 256F;
-        return Vector3f.from(pitch, yaw, headYaw);
-    }
+    Vector3f readVector3f(ByteBuf buffer);
 
-    public void writeRotation2f(ByteBuf buffer, Vector2f vector2f) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector2f, "vector2f");
-        buffer.writeByte((int) (vector2f.getX() * 256F / 360));
-        buffer.writeByte((int) (vector2f.getY() * 256F / 360));
-    }
+    void writeVector3f(ByteBuf buffer, Vector3f vector3f);
 
-    public void writeRotation3f(ByteBuf buffer, Vector3f vector3f) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector3f, "vector3f");
-        buffer.writeByte((int) (vector3f.getX() * 256F / 360));
-        buffer.writeByte((int) (vector3f.getY() * 256F / 360));
-        buffer.writeByte((int) (vector3f.getZ() * 256F / 360));
-    }
+    Vector2f readVector2f(ByteBuf buffer);
 
-    public Vector3f readVector3f(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return Vector3f.from(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
-    }
+    void writeVector2f(ByteBuf buffer, Vector2f vector2f);
 
-    public void writeVector3f(ByteBuf buffer, Vector3f vector3f) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector3f, "vector3f");
-        buffer.writeFloat(vector3f.getX());
-        buffer.writeFloat(vector3f.getY());
-        buffer.writeFloat(vector3f.getZ());
-    }
+    Direction readDirection(ByteBuf buffer);
 
-    public Vector2f readVector2f(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return Vector2f.from(buffer.readFloat(), buffer.readFloat());
-    }
+    void writeDirection(ByteBuf buffer, Direction direction);
 
-    public void writeVector2f(ByteBuf buffer, Vector2f vector2f) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector2f, "vector2f");
-        buffer.writeFloat(vector2f.getX());
-        buffer.writeFloat(vector2f.getY());
-    }
+    VillagerData readVillagerData(ByteBuf buffer);
 
-    public Direction readDirection(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return Direction.getById(this.readVarInt(buffer));
-    }
+    void writeVillagerData(ByteBuf buffer, VillagerData villagerData);
 
-    public void writeDirection(ByteBuf buffer, Direction direction) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(direction, "direction");
-        this.writeVarInt(buffer, direction.ordinal());
-    }
+    Particle readParticle(ByteBuf buffer);
 
-    public VillagerData readVillagerData(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return new VillagerData(this.readVarInt(buffer), this.readVarInt(buffer), this.readVarInt(buffer));
-    }
-
-    public void writeVillagerData(ByteBuf buffer, VillagerData villagerData) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(villagerData, "villagerData");
-        this.writeVarInt(buffer, villagerData.getLevel());
-        this.writeVarInt(buffer, villagerData.getProfession());
-        this.writeVarInt(buffer, villagerData.getType());
-    }
-
-    public Particle readParticle(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        ParticleType type = this.getParticle(this.readVarInt(buffer));
-        return new Particle(type, this.readParticleData(buffer, type));
-    }
-
-    public void writeParticle(ByteBuf buffer, Particle particle) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(particle, "particle");
-        this.writeVarInt(buffer, particle.getType().ordinal());
-        this.writeParticleData(buffer, particle);
-    }
+    void writeParticle(ByteBuf buffer, Particle particle);
 
     @Nullable
-    public Particle readParticleData(ByteBuf buffer, ParticleType type) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(type, "particleType");
-        if (type.getTypeClass() == int.class) {
-            return new Particle(type, this.readVarInt(buffer));
-        } else if (type.getTypeClass() == Vector4f.class) {
-            return new Particle(type, Vector4f.from(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat()));
-        } else if (type.getTypeClass() == ItemStack.class) {
-            return new Particle(type, this.readItemStack(buffer));
-        }
-        return null;
-    }
+    Particle readParticleData(ByteBuf buffer, ParticleType type);
 
-    public void writeParticleData(ByteBuf buffer, Particle particle) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(particle, "particle");
-        ParticleType type = particle.getType();
-        Object data = particle.getData();
-        if (type.getTypeClass() == int.class) {
-            this.writeVarInt(buffer, (int) data);
-        } else if (type.getTypeClass() == Vector4f.class) {
-            Vector4f color = (Vector4f) data;
-            buffer.writeFloat(color.getX());
-            buffer.writeFloat(color.getY());
-            buffer.writeFloat(color.getZ());
-            buffer.writeFloat(color.getW());
-        } else if (type.getTypeClass() == ItemStack.class) {
-            this.writeItemStack(buffer, (ItemStack) data);
-        }
-    }
+    void writeParticleData(ByteBuf buffer, Particle particle);
 
     // TODO: Move these to version helpers as they have changed between versions
-    public ItemStack readItemStack(ByteBuf buffer) {
-        boolean present = buffer.readBoolean();
-        if (!present) {
-            return null;
-        }
+    ItemStack readItemStack(ByteBuf buffer);
 
-        int item = VarInts.readUnsignedInt(buffer);
-        return new ItemStack(item, buffer.readByte(), readTag(buffer));
-    }
+    void writeItemStack(ByteBuf buffer, ItemStack item);
 
-    public void writeItemStack(ByteBuf buffer, ItemStack item) {
-        buffer.writeBoolean(item != null);
-        if (item != null) {
-            VarInts.writeUnsignedInt(buffer, item.getId());
-            buffer.writeByte(item.getAmount());
-            writeTag(buffer, item.getNbt());
-        }
-    }
+    RecipeIngredient readRecipeIngredient(ByteBuf buffer);
 
-    public RecipeIngredient readRecipeIngredient(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return new RecipeIngredient(this.readArray(buffer, new ItemStack[0], this::readItemStack));
-    }
+    void writeRecipeIngredient(ByteBuf buffer, RecipeIngredient ingredient);
 
-    public void writeRecipeIngredient(ByteBuf buffer, RecipeIngredient ingredient) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(ingredient, "ingredient");
-        this.writeArray(buffer, ingredient.getChoices(), this::writeItemStack);
-    }
+    Recipe readRecipe(ByteBuf buffer);
 
-    public Recipe readRecipe(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Key key = this.readKey(buffer);
-        RecipeType<? extends Recipe> type = this.getRecipeType(key);
-        return type.read(this, buffer);
-    }
+    void writeRecipe(ByteBuf buffer, Recipe recipe);
 
-    public void writeRecipe(ByteBuf buffer, Recipe recipe) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(recipe, "recipe");
-        this.writeKey(buffer, this.getRecipeTypeKey(recipe.getType()));
-        recipe.getType().write(this, buffer, recipe);
-    }
+    Vector3i readBlockPosition(ByteBuf buffer);
 
-    public Vector3i readBlockPosition(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        long position = buffer.readLong();
-        return Vector3i.from((int) (position >> 38), (int) (position >> 12), (int) (position << 26 >> 38));
-    }
+    void writeBlockPosition(ByteBuf buffer, Vector3i vector3i);
 
-    public void writeBlockPosition(ByteBuf buffer, Vector3i vector3i) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(vector3i, "vector3i");
-        buffer.writeLong((long) (vector3i.getX() & 0x3FFFFFF) << 38 | (long) (vector3i.getZ() & 0x3FFFFFF) << 12 | (long) (vector3i.getY() & 0xFFF));
-    }
+    <T> void readArray(ByteBuf buffer, Collection<T> array, BiFunction<ByteBuf, JavaCodecHelper, T> function);
 
-    /*
-        Helper array serialization
-     */
+    <T> void writeArray(ByteBuf buffer, Collection<T> array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer);
 
-    public <T> void readArray(ByteBuf buffer, Collection<T> array, BiFunction<ByteBuf, JavaCodecHelper, T> function) {
-        int length = VarInts.readUnsignedInt(buffer);
-        for (int i = 0; i < length; i++) {
-            array.add(function.apply(buffer, this));
-        }
-    }
+    <T> T[] readArray(ByteBuf buffer, T[] array, BiFunction<ByteBuf, JavaCodecHelper, T> function);
 
-    public <T> void writeArray(ByteBuf buffer, Collection<T> array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer) {
-        VarInts.writeUnsignedInt(buffer, array.size());
-        for (T val : array) {
-            biConsumer.accept(buffer, this, val);
-        }
-    }
+    <T> void writeArray(ByteBuf buffer, T[] array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer);
 
-    public <T> T[] readArray(ByteBuf buffer, T[] array, BiFunction<ByteBuf, JavaCodecHelper, T> function) {
-        ObjectArrayList<T> list = new ObjectArrayList<>();
-        readArray(buffer, list, function);
-        return list.toArray(array);
-    }
+    <T> void readArray(ByteBuf buffer, Collection<T> array, Function<ByteBuf, T> function);
 
-    public <T> void writeArray(ByteBuf buffer, T[] array, TriConsumer<ByteBuf, JavaCodecHelper, T> biConsumer) {
-        VarInts.writeUnsignedInt(buffer, array.length);
-        for (T val : array) {
-            biConsumer.accept(buffer, this, val);
-        }
-    }
+    <T> void writeArray(ByteBuf buffer, Collection<T> array, BiConsumer<ByteBuf, T> biConsumer);
 
-    /*
-        Non-helper array serialization
-     */
+    <T> T[] readArray(ByteBuf buffer, T[] array, Function<ByteBuf, T> function);
 
-    public <T> void readArray(ByteBuf buffer, Collection<T> array, Function<ByteBuf, T> function) {
-        int length = VarInts.readUnsignedInt(buffer);
-        for (int i = 0; i < length; i++) {
-            array.add(function.apply(buffer));
-        }
-    }
+    <T> void writeArray(ByteBuf buffer, T[] array, BiConsumer<ByteBuf, T> biConsumer);
 
-    public <T> void writeArray(ByteBuf buffer, Collection<T> array, BiConsumer<ByteBuf, T> biConsumer) {
-        VarInts.writeUnsignedInt(buffer, array.size());
-        for (T val : array) {
-            biConsumer.accept(buffer, val);
-        }
-    }
+    int[] readIntArray(ByteBuf buffer, ToIntFunction<ByteBuf> function);
 
-    public <T> T[] readArray(ByteBuf buffer, T[] array, Function<ByteBuf, T> function) {
-        ObjectArrayList<T> list = new ObjectArrayList<>();
-        readArray(buffer, list, function);
-        return list.toArray(array);
-    }
-
-    public <T> void writeArray(ByteBuf buffer, T[] array, BiConsumer<ByteBuf, T> biConsumer) {
-        VarInts.writeUnsignedInt(buffer, array.length);
-        for (T val : array) {
-            biConsumer.accept(buffer, val);
-        }
-    }
-
-    public int[] readIntArray(ByteBuf buffer, ToIntFunction<ByteBuf> function) {
-        int[] array = new int[VarInts.readUnsignedInt(buffer)];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = function.applyAsInt(buffer);
-        }
-        return array;
-    }
-
-    public void writeIntArray(ByteBuf buffer, int[] array, ObjIntConsumer<ByteBuf> consumer) {
-        VarInts.writeUnsignedInt(buffer, array.length);
-        for (int val : array) {
-            consumer.accept(buffer, val);
-        }
-    }
+    void writeIntArray(ByteBuf buffer, int[] array, ObjIntConsumer<ByteBuf> consumer);
 
     @SuppressWarnings("unchecked")
-    public <T> T readTag(ByteBuf buffer) {
-        try (NBTInputStream reader = NbtUtils.createReader(new ByteBufInputStream(buffer))) {
-            return (T) reader.readTag();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    <T> T readTag(ByteBuf buffer);
 
-    public <T> void writeTag(ByteBuf buffer, T tag) {
-        try (NBTOutputStream writer = NbtUtils.createWriter(new ByteBufOutputStream(buffer))) {
-            writer.writeTag(tag);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    <T> void writeTag(ByteBuf buffer, T tag);
 
-    public Component readComponent(ByteBuf buffer) {
-        return GsonComponentSerializer.gson().deserialize(this.readString(buffer));
-    }
+    Component readComponent(ByteBuf buffer);
 
-    public void writeComponent(ByteBuf buffer, Component component) {
-        this.writeString(buffer, GsonComponentSerializer.gson().serialize(component));
-    }
+    void writeComponent(ByteBuf buffer, Component component);
 
-    public Pose readPose(ByteBuf buffer) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        return this.getPose(this.readVarInt(buffer));
-    }
+    Pose readPose(ByteBuf buffer);
 
-    public void writePose(ByteBuf buffer, Pose pose) {
-        Preconditions.checkNotNull(buffer, "buffer");
-        Preconditions.checkNotNull(pose, "pose");
-        this.writeVarInt(buffer, this.getPoseId(pose));
-    }
+    void writePose(ByteBuf buffer, Pose pose);
 
-    public <T> EntityData<T> readEntityData(int dataId, int id, ByteBuf buffer) {
-        EntityDataType<T> type = this.getEntityDataType(id);
-        return new EntityData<>(dataId, type, type.read(this, buffer));
-    }
+    <T> EntityData<T> readEntityData(int dataId, int id, ByteBuf buffer);
 
-    public <T> void writeEntityData(EntityData<T> data, ByteBuf buffer) {
-        data.getType().write(this, buffer, data.getValue());
-    }
+    <T> void writeEntityData(EntityData<T> data, ByteBuf buffer);
 
-    public <T> T readOptional(ByteBuf buffer, Function<ByteBuf, T> readFunction) {
-        if (buffer.readBoolean()) {
-            return readFunction.apply(buffer);
-        }
-        return null;
-    }
+    <T> T readOptional(ByteBuf buffer, Function<ByteBuf, T> readFunction);
 
-    public <T> void writeOptional(ByteBuf buffer, T value, BiConsumer<ByteBuf, T> writeFunction) {
-        buffer.writeBoolean(value != null);
-        if (value != null) {
-            writeFunction.accept(buffer, value);
-        }
-    }
+    <T> void writeOptional(ByteBuf buffer, T value, BiConsumer<ByteBuf, T> writeFunction);
 
-    public final int getEntityId(EntityType entityType) {
-        return this.entityTypes.get(entityType);
-    }
+    int getEntityId(EntityType entityType);
 
-    public final EntityType getEntityType(int entityId) {
-        return this.entityTypes.get(entityId);
-    }
+    EntityType getEntityType(int entityId);
 
-    public final int getBlockEntityActionId(BlockEntityAction action) {
-        return this.blockEntityActions.get(action);
-    }
+    int getBlockEntityActionId(BlockEntityAction action);
 
-    public final BlockEntityAction getBlockEntityAction(int actionId) {
-        return this.blockEntityActions.get(actionId);
-    }
+    BlockEntityAction getBlockEntityAction(int actionId);
 
-    public final int getContainerId(ContainerType containerType) {
-        return this.containerTypes.get(containerType);
-    }
+    int getContainerId(ContainerType containerType);
 
-    public final ContainerType getContainerType(int containerId) {
-        return this.containerTypes.get(containerId);
-    }
+    ContainerType getContainerType(int containerId);
 
-    public final Pose getPose(int id) {
-        return this.poses.get(id);
-    }
+    Pose getPose(int id);
 
-    public final int getPoseId(Pose pose) {
-        return this.poses.get(pose);
-    }
+    int getPoseId(Pose pose);
 
     @SuppressWarnings("unchecked")
-    public final <T> EntityDataType<T> getEntityDataType(int id) {
-        return (EntityDataType<T>) this.entityDataTypes.get(id);
-    }
+    <T> EntityDataType<T> getEntityDataType(int id);
 
-    public final int getEntityDataTypeId(EntityDataType<?> type) {
-        return this.entityDataTypes.get(type);
-    }
+    int getEntityDataTypeId(EntityDataType<?> type);
 
-    public final ParticleType getParticle(int id) {
-        return this.particles.get(id);
-    }
+    ParticleType getParticle(int id);
 
-    public final int getParticleId(ParticleType particle) {
-        return this.particles.get(particle);
-    }
+    int getParticleId(ParticleType particle);
 
-    public final MobEffectType getMobEffect(int id) {
-        return this.mobEffects.get(id);
-    }
+    MobEffectType getMobEffect(int id);
 
-    public final int getMobEffectId(MobEffectType mobEffect) {
-        return this.mobEffects.get(mobEffect);
-    }
+    int getMobEffectId(MobEffectType mobEffect);
 
-    public final RecipeType<? extends Recipe> getRecipeType(Key key) {
-        return this.recipeTypes.get(key);
-    }
+    RecipeType<? extends Recipe> getRecipeType(Key key);
 
-    public final Key getRecipeTypeKey(RecipeType<?> recipeType) {
-        return this.recipeTypes.inverse().get(recipeType);
-    }
+    Key getRecipeTypeKey(RecipeType<?> recipeType);
 
-    protected abstract void registerEntityTypes();
-
-    protected abstract void registerBlockEntityActions();
-
-    protected abstract void registerContainerTypes();
-
-    protected abstract void registerEntityDataTypes();
-
-    public abstract void registerPoses();
-
-    public abstract void registerParticles();
-
-    public abstract void registerMobEffects();
-
-    public abstract void registerRecipeTypes();
+    void registerRecipeTypes();
 }

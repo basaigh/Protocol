@@ -196,7 +196,7 @@ public final class JavaCodec {
             private final Map<Class<? extends JavaPacket<?>>, JavaPacketDefinition<? extends JavaPacket<?>>> serverboundPackets = new IdentityHashMap<>();
 
             @SuppressWarnings("rawTypes")
-            public <T extends JavaPacket<?>> Builder registerClientbound(Class<T> packetClass, JavaPacketSerializer<JavaPacket<?>> serializer, @Nonnegative int id) {
+            public <T extends JavaPacket<?>> Builder registerClientboundPacket(Class<T> packetClass, JavaPacketSerializer<T> serializer, @Nonnegative int id) {
                 checkArgument(id >= 0, "id cannot be negative");
                 checkArgument(!clientboundPackets.containsKey(packetClass), "Packet class already registered");
 
@@ -209,7 +209,7 @@ public final class JavaCodec {
                     throw new IllegalArgumentException("Unable to find suitable constructor for packet factory", e);
                 }
 
-                JavaPacketDefinition<T> info = new JavaPacketDefinition<T>(id, (Supplier) factory, serializer);
+                JavaPacketDefinition<T> info = new JavaPacketDefinition<T>(id, (Supplier) factory, (JavaPacketSerializer<JavaPacket<?>>) serializer);
 
                 clientboundPackets.put(packetClass, info);
 
@@ -226,14 +226,14 @@ public final class JavaCodec {
                 return this;
             }
 
-            public Builder deregisterClientbound(Class<? extends JavaPacket<?>> packetClass) {
+            public Builder deregisterClientboundPacket(Class<? extends JavaPacket<?>> packetClass) {
                 checkNotNull(packetClass, "packetClass");
 
                 JavaPacketDefinition<? extends JavaPacket<?>> info = clientboundPackets.remove(packetClass);
                 return this;
             }
 
-            public <T extends JavaPacket<?>> Builder registerServerbound(Class<T> packetClass, JavaPacketSerializer<JavaPacket<?>> serializer, @Nonnegative int id) {
+            public <T extends JavaPacket<?>> Builder registerServerboundPacket(Class<T> packetClass, JavaPacketSerializer<T> serializer, @Nonnegative int id) {
                 checkArgument(id >= 0, "id cannot be negative");
                 checkArgument(!serverboundPackets.containsKey(packetClass), "Packet class already registered");
 
@@ -246,7 +246,7 @@ public final class JavaCodec {
                     throw new IllegalArgumentException("Unable to find suitable constructor for packet factory", e);
                 }
 
-                JavaPacketDefinition<T> info = new JavaPacketDefinition<T>(id, (Supplier) factory, serializer);
+                JavaPacketDefinition<T> info = new JavaPacketDefinition<T>(id, (Supplier) factory, (JavaPacketSerializer<JavaPacket<?>>) serializer);
 
                 serverboundPackets.put(packetClass, info);
 
@@ -263,7 +263,7 @@ public final class JavaCodec {
                 return this;
             }
 
-            public Builder deregisterServerbound(Class<? extends JavaPacket<?>> packetClass) {
+            public Builder deregisterServerboundPacket(Class<? extends JavaPacket<?>> packetClass) {
                 checkNotNull(packetClass, "packetClass");
 
                 JavaPacketDefinition<? extends JavaPacket<?>> info = serverboundPackets.remove(packetClass);

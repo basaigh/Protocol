@@ -9,7 +9,6 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 import org.cloudburstmc.protocol.java.JavaServerSession;
 import org.cloudburstmc.protocol.java.JavaSession;
 import org.cloudburstmc.protocol.java.codec.JavaCodec;
-import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
 
 public class PacketEncoder extends MessageToByteEncoder<JavaPacket<?>> {

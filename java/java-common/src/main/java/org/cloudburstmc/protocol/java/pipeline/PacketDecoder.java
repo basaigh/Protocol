@@ -8,7 +8,6 @@ import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import lombok.AllArgsConstructor;
 import org.cloudburstmc.protocol.java.JavaSession;
-import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.type.JavaPacketType;
 
 import java.util.List;
