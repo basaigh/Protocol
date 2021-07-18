@@ -1,9 +1,6 @@
 package org.cloudburstmc.protocol.bedrock.data.skin;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 @Getter
+@ToString(exclude = {"image"})
 @EqualsAndHashCode(doNotUseGetters = true)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ImageData {

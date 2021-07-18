@@ -2,11 +2,9 @@ package org.cloudburstmc.protocol.bedrock.data.structure;
 
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.math.vector.Vector3i;
-import lombok.AllArgsConstructor;
 import lombok.Value;
 
 @Value
-@AllArgsConstructor
 public class StructureSettings {
     private final String paletteName;
     private final boolean ignoringEntities;
