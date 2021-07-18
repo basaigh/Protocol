@@ -1,11 +1,11 @@
 package org.cloudburstmc.protocol.java.pipeline;
 
-import com.nukkitx.network.VarInts;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
+import org.cloudburstmc.protocol.common.util.VarInts;
 import org.cloudburstmc.protocol.java.JavaServerSession;
 import org.cloudburstmc.protocol.java.JavaSession;
 import org.cloudburstmc.protocol.java.codec.JavaCodec;

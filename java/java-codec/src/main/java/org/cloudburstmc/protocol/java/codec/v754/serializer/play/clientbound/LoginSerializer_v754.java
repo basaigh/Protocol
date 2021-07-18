@@ -1,11 +1,11 @@
 package org.cloudburstmc.protocol.java.codec.v754.serializer.play.clientbound;
 
-import com.nukkitx.network.VarInts;
 import io.netty.buffer.ByteBuf;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.key.Key;
 import org.cloudburstmc.protocol.common.exception.PacketSerializeException;
+import org.cloudburstmc.protocol.common.util.VarInts;
 import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.data.GameType;

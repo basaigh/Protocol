@@ -27,7 +27,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static com.nukkitx.network.util.Preconditions.*;
+import static org.cloudburstmc.protocol.common.util.Preconditions.*;
 
 @Getter
 @Immutable

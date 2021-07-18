@@ -6,11 +6,11 @@ import com.nukkitx.math.vector.*;
 import com.nukkitx.nbt.NBTInputStream;
 import com.nukkitx.nbt.NBTOutputStream;
 import com.nukkitx.nbt.NbtUtils;
-import com.nukkitx.network.VarInts;
-import com.nukkitx.network.util.Preconditions;
+import org.cloudburstmc.protocol.common.util.Preconditions;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.util.internal.logging.InternalLogger;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -21,6 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.cloudburstmc.protocol.common.util.TriConsumer;
 import org.cloudburstmc.protocol.common.util.TypeMap;
+import org.cloudburstmc.protocol.common.util.VarInts;
 import org.cloudburstmc.protocol.java.data.Direction;
 import org.cloudburstmc.protocol.java.data.crafting.Recipe;
 import org.cloudburstmc.protocol.java.data.crafting.RecipeIngredient;
@@ -99,14 +100,16 @@ public abstract class BaseJavaCodecHelper implements JavaCodecHelper {
     @Override
     public String readString(ByteBuf buffer) {
         Preconditions.checkNotNull(buffer, "buffer");
-        return new String(readByteArray(buffer), StandardCharsets.UTF_8);
+        int length = VarInts.readUnsignedInt(buffer);
+        return (String) buffer.readCharSequence(length, StandardCharsets.UTF_8);
     }
 
     @Override
     public void writeString(ByteBuf buffer, String string) {
         Preconditions.checkNotNull(buffer, "buffer");
         Preconditions.checkNotNull(string, "string");
-        writeByteArray(buffer, string.getBytes(StandardCharsets.UTF_8));
+        VarInts.writeUnsignedInt(buffer, ByteBufUtil.utf8Bytes(string));
+        buffer.writeCharSequence(string, StandardCharsets.UTF_8);
     }
 
     @Override
