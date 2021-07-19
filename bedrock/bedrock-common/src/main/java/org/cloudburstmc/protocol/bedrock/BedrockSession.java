@@ -14,7 +14,6 @@ import io.netty.util.internal.logging.InternalLoggerFactory;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.compat.BedrockCompat;
-import org.cloudburstmc.protocol.bedrock.handler.BatchHandler;
 import org.cloudburstmc.protocol.bedrock.handler.DefaultBatchHandler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
@@ -22,6 +21,7 @@ import org.cloudburstmc.protocol.bedrock.raknet.BedrockPeer;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import org.cloudburstmc.protocol.bedrock.wrapper.BedrockWrapperSerializer;
 import org.cloudburstmc.protocol.common.MinecraftSession;
+import org.cloudburstmc.protocol.common.handler.BatchHandler;
 
 import javax.annotation.Nonnull;
 import javax.crypto.Cipher;
