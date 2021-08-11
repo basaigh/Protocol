@@ -5,9 +5,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.EventLoop;
 import lombok.AllArgsConstructor;
 import org.cloudburstmc.protocol.common.MinecraftServerSession;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.auth.SessionsHandler;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
 import org.cloudburstmc.protocol.java.exception.ProfileException;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.handler.JavaHandshakePacketHandler;
 import org.cloudburstmc.protocol.java.packet.handler.JavaLoginPacketHandler;
 import org.cloudburstmc.protocol.java.packet.handler.JavaPacketHandler;
@@ -92,7 +94,7 @@ public class JavaServerSession extends JavaSession implements MinecraftServerSes
         private final boolean onlineMode;
 
         @Override
-        public boolean handle(LoginStartPacket packet) {
+        public PacketSignal handle(LoginStartPacket packet) {
             this.session.setProfile(packet.getProfile());
             if (!this.onlineMode) {
                 LoginSuccessPacket successPacket = new LoginSuccessPacket();
@@ -101,21 +103,21 @@ public class JavaServerSession extends JavaSession implements MinecraftServerSes
                 this.session.setProtocolState(State.PLAY);
                 this.session.setPacketHandler(this.packetHandler);
                 this.session.server.getHandler().onLogin(this.session);
-                return true;
+                return PacketSignal.HANDLED;
             }
             EncryptionRequestPacket requestPacket = new EncryptionRequestPacket();
             requestPacket.setPublicKey(EncryptionUtils.KEY_PAIR.getPublic());
             requestPacket.setVerifyToken(this.session.verifyToken);
             this.session.sendPacket(requestPacket);
-            return true;
+            return PacketSignal.HANDLED;
         }
 
         @Override
-        public boolean handle(EncryptionResponsePacket packet) {
+        public PacketSignal handle(EncryptionResponsePacket packet) {
             PrivateKey privateKey = EncryptionUtils.KEY_PAIR.getPrivate();
             if (!Arrays.equals(this.session.verifyToken, EncryptionUtils.getVerifyToken(privateKey, packet.getVerifyToken()))) {
                 this.session.disconnect("Invalid nonce!");
-                return true;
+                return PacketSignal.HANDLED;
             }
             SecretKey secretKey = EncryptionUtils.getSecret(privateKey, packet.getSharedSecret());
             this.session.enableEncryption(secretKey);
@@ -141,7 +143,7 @@ public class JavaServerSession extends JavaSession implements MinecraftServerSes
                 this.session.setPacketHandler(this.packetHandler);
                 this.session.server.getHandler().onLogin(this.session);
             }));
-            return true;
+            return PacketSignal.HANDLED;
         }
     }
 
@@ -151,21 +153,21 @@ public class JavaServerSession extends JavaSession implements MinecraftServerSes
         private final Function<JavaServerSession, JavaPong> pong;
 
         @Override
-        public boolean handle(StatusRequestPacket packet) {
+        public PacketSignal handle(StatusRequestPacket packet) {
             StatusResponsePacket response = new StatusResponsePacket();
             response.setResponse(pong.apply(session));
 
             session.sendPacket(response);
-            return true;
+            return PacketSignal.HANDLED;
         }
 
         @Override
-        public boolean handle(PingPacket packet) {
+        public PacketSignal handle(PingPacket packet) {
             PongPacket pong = new PongPacket();
             pong.setTimestamp(packet.getTimestamp());
 
             session.sendPacket(pong);
-            return true;
+            return PacketSignal.HANDLED;
         }
     }
 }

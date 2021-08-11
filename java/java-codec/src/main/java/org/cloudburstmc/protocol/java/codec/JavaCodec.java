@@ -179,6 +179,10 @@ public final class JavaCodec {
             }
         }
 
+        public JavaCodecHelper createHelper() {
+            return this.helperFactory.get();
+        }
+
         @SuppressWarnings("unchecked")
         public Builder toBuilder() {
             Builder builder = new Builder();

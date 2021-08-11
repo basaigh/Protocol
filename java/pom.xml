@@ -13,7 +13,7 @@
     </parent>
 
     <modules>
-        <module>java-common</module>
         <module>java-codec</module>
+        <module>java-connection</module>
     </modules>
 </project>

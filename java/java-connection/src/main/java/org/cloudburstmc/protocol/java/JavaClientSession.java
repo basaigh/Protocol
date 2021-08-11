@@ -7,11 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.cloudburstmc.protocol.common.MinecraftSession;
+import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.java.auth.MojangAuthHandler;
 import org.cloudburstmc.protocol.java.auth.SessionsHandler;
 import org.cloudburstmc.protocol.java.data.auth.AuthData;
 import org.cloudburstmc.protocol.java.data.profile.GameProfile;
 import org.cloudburstmc.protocol.java.data.profile.property.PropertyMap;
+import org.cloudburstmc.protocol.java.packet.JavaPacket;
 import org.cloudburstmc.protocol.java.packet.handler.JavaLoginPacketHandler;
 import org.cloudburstmc.protocol.java.packet.handler.JavaPacketHandler;
 import org.cloudburstmc.protocol.java.packet.State;
@@ -85,7 +87,7 @@ public class JavaClientSession extends JavaSession implements MinecraftSession<J
         private final JavaPacketHandler packetHandler;
 
         @Override
-        public boolean handle(EncryptionRequestPacket packet) {
+        public PacketSignal handle(EncryptionRequestPacket packet) {
             SecretKey secretKey;
             try {
                 KeyGenerator gen = KeyGenerator.getInstance("AES");
@@ -102,17 +104,17 @@ public class JavaClientSession extends JavaSession implements MinecraftSession<J
                 this.session.sendPacket(responsePacket);
                 this.session.enableEncryption(secretKey);
             });
-            return true;
+            return PacketSignal.HANDLED;
         }
 
         @Override
-        public boolean handle(SetCompressionPacket packet) {
+        public PacketSignal handle(SetCompressionPacket packet) {
             this.session.setCompressionThreshold(packet.getCompressionThreshold());
-            return true;
+            return PacketSignal.HANDLED;
         }
 
         @Override
-        public boolean handle(LoginSuccessPacket packet) {
+        public PacketSignal handle(LoginSuccessPacket packet) {
             this.session.setProtocolState(State.PLAY);
             this.session.setPacketHandler(this.packetHandler);
             this.session.client.getHandler().onLogin(this.session);
@@ -120,7 +122,7 @@ public class JavaClientSession extends JavaSession implements MinecraftSession<J
             // No need to keep storing these
             this.authData.setClientToken(null);
             this.authData.setAccessToken(null);
-            return true;
+            return PacketSignal.HANDLED;
         }
     }
 }
