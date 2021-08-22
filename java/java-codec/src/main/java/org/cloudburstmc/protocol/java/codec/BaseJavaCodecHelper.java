@@ -54,7 +54,7 @@ public abstract class BaseJavaCodecHelper implements JavaCodecHelper {
     protected final TypeMap<Pose> poses;
     protected final TypeMap<ParticleType> particles;
     protected final TypeMap<MobEffectType> mobEffects;
-    protected final BiMap<Key, RecipeType<? extends Recipe>> recipeTypes = HashBiMap.create(); //TODO: change this so we can remove the registerRecipeTypes() method
+    private final BiMap<Key, RecipeType<? extends Recipe>> recipeTypes = HashBiMap.create(); //TODO: change this so we can remove the registerRecipeTypes() method
 
     @Override
     public int readVarInt(ByteBuf buffer) {
@@ -401,12 +401,13 @@ public abstract class BaseJavaCodecHelper implements JavaCodecHelper {
         return type.read(this, buffer);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void writeRecipe(ByteBuf buffer, Recipe recipe) {
+    public <T extends Recipe> void writeRecipe(ByteBuf buffer, Recipe recipe) {
         Preconditions.checkNotNull(buffer, "buffer");
         Preconditions.checkNotNull(recipe, "recipe");
-        this.writeKey(buffer, this.getRecipeTypeKey(recipe.getType()));
-        recipe.getType().write(this, buffer, recipe);
+        this.writeKey(buffer, recipe.getIdentifier());
+        ((RecipeType<Recipe>) recipe.getType()).write(this, buffer, recipe);
     }
 
     @Override
@@ -658,6 +659,8 @@ public abstract class BaseJavaCodecHelper implements JavaCodecHelper {
     @Override
     public final Key getRecipeTypeKey(RecipeType<?> recipeType) {
         return this.recipeTypes.inverse().get(recipeType);
+    protected final void registerRecipeType(RecipeType<? extends Recipe> type) {
+        this.recipeTypes.put(type.getIdentifier(), type);
     }
 
 }
