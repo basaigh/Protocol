@@ -110,7 +110,7 @@ public interface JavaCodecHelper {
 
     Recipe readRecipe(ByteBuf buffer);
 
-    void writeRecipe(ByteBuf buffer, Recipe recipe);
+    <T extends Recipe> void writeRecipe(ByteBuf buffer, Recipe recipe);
 
     Vector3i readBlockPosition(ByteBuf buffer);
 
@@ -187,8 +187,6 @@ public interface JavaCodecHelper {
     int getMobEffectId(MobEffectType mobEffect);
 
     RecipeType<? extends Recipe> getRecipeType(Key key);
-
-    Key getRecipeTypeKey(RecipeType<?> recipeType);
 
     void registerRecipeTypes();
 }

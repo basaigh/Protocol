@@ -656,9 +656,6 @@ public abstract class BaseJavaCodecHelper implements JavaCodecHelper {
         return this.recipeTypes.get(key);
     }
 
-    @Override
-    public final Key getRecipeTypeKey(RecipeType<?> recipeType) {
-        return this.recipeTypes.inverse().get(recipeType);
     protected final void registerRecipeType(RecipeType<? extends Recipe> type) {
         this.recipeTypes.put(type.getIdentifier(), type);
     }
