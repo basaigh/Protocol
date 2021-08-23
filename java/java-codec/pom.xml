@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>org.cloudburstmc.protocol</groupId>
-            <artifactId>java-common</artifactId>
+            <artifactId>java-connection</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
