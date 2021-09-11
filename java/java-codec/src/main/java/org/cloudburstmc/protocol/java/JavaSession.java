@@ -165,7 +165,7 @@ public abstract class JavaSession extends SimpleChannelInboundHandler<JavaPacket
         }
 
         // Verify that the packet ID exists.
-        this.packetCodec.getCodec(this.protocolState).getId(packet, outgoingClientbound);
+        //this.packetCodec.getCodec(this.protocolState).getId(packet, outgoingClientbound);
     }
 
     @Override

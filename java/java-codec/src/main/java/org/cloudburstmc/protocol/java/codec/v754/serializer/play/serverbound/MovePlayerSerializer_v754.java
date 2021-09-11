@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.java.codec.JavaPacketSerializer;
 import org.cloudburstmc.protocol.java.packet.play.serverbound.MovePlayerPacket;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MovePlayerSerializer_v754<T extends MovePlayerPacket> implements JavaPacketSerializer<T> {
+public abstract class MovePlayerSerializer_v754<T extends MovePlayerPacket> implements JavaPacketSerializer<T> {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class OnGround extends MovePlayerSerializer_v754<MovePlayerPacket> {

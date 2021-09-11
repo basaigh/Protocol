@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.java.packet.type.JavaPlayPacketType;
 
 @Data
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
-public class CustomPayloadPacket implements BidirectionalJavaPacket<JavaPlayPacketHandler> {
+public class CustomPayloadPacket extends BidirectionalJavaPacket<JavaPlayPacketHandler> {
     private Key channel;
     private ByteBuf buffer;
 

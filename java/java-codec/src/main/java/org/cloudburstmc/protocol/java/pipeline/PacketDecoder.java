@@ -26,7 +26,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         }
         int packetId = VarInts.readUnsignedInt(in);
         try {
-            out.add(this.session.getPacketCodec().getCodec(this.session.getProtocolState()).tryDecode(in, packetId, direction));
+            //out.add(this.session.getPacketCodec().getCodec(this.session.getProtocolState()).tryDecode(in, packetId, direction));
         } catch (Throwable ex) {
             log.error("Error decoding packet: {}", packetId, ex);
         }

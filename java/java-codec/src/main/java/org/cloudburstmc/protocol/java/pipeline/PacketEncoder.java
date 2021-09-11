@@ -9,6 +9,7 @@ import org.cloudburstmc.protocol.common.util.VarInts;
 import org.cloudburstmc.protocol.java.JavaServerSession;
 import org.cloudburstmc.protocol.java.JavaSession;
 import org.cloudburstmc.protocol.java.codec.JavaCodec;
+import org.cloudburstmc.protocol.java.codec.JavaCodecHelper;
 import org.cloudburstmc.protocol.java.packet.JavaPacket;
 
 public class PacketEncoder extends MessageToByteEncoder<JavaPacket<?>> {
@@ -30,7 +31,7 @@ public class PacketEncoder extends MessageToByteEncoder<JavaPacket<?>> {
         int packetId = stateCodec.getPacketDefinition((Class<? extends JavaPacket<?>>) packet.getClass(), clientbound).getId();
         try {
             VarInts.writeUnsignedInt(out, packetId);
-            stateCodec.tryEncode(helper, out, packet, clientbound);
+            //stateCodec.tryEncode(helper, out, packet, clientbound);
         } catch (Throwable ex) {
             log.error("Error encoding packet: {}", packetId, ex);
         }
